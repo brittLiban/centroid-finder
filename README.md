@@ -4,7 +4,7 @@
 AI is *NOT ALLOWED* for generating implementations of the classes.
 AI is allowed for helping you make test cases.
 
-Don't have it just create the tests mindlessly for you though! Make sure you're actively involved in making the tests.
+Don't |Liban it just create the tests mindlessly for you though! Make sure you're actively involved in making the tests.
 
 DO NOT MIX HUMAN AND AI COMMITS.
 EVERY COMMIT THAT USES AI MUST START WITH THE COMMIT MESSAGE "AI Used" AND IT MUST ONLY CREATE/ALTER TEST FILES
