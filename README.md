@@ -6,7 +6,7 @@ AI is allowed for helping you make test cases.
 
 Don't |Liban it just create the tests mindlessly for you though! Make sure you're actively involved in making the tests.
 
-DO NOT MIX HUMAN AND AI COMMITS.
+DO NOT MIX HUMAN AND AI COMMITS Bahram.
 EVERY COMMIT THAT USES AI MUST START WITH THE COMMIT MESSAGE "AI Used" AND IT MUST ONLY CREATE/ALTER TEST FILES
 
 For this wave, please have each partner make a commit below with their username acknowledging that they understand the rules, according to the following format:
