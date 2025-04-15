@@ -99,5 +99,6 @@ BinarizingImageGroupFinder
 
     It continues to group each coordinate inside the groups var into a csv file
 
+
     
-    
+    NEED TO FOLLOW UP AND FORMAT THIS BETTER
