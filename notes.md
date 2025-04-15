@@ -78,4 +78,20 @@ DistanceImageBinrizer
 
     The main method continues to try to write a image using the newly created binaryImage with a try catch block. It will be a png called binarized.png - we should expect a black and white photo
     
+    ImageGroupFinder groupFinder is creating a BinarizingImageGroupFinder based on the binarizer (binarized image) and a DfsBinaryGroupFinder()
 
+ImageGroupFinder
+    This is interface that will return a list of all the connected/touching pixels 
+BinarizingImageGroupFinder
+    This implements Group Finder
+
+    At a high level this is going to be using the binarized image we produced earlier in the code and producing a list in descending order of all the pixels that touch eachother. This is whats defined as a connected group. 
+
+    BinarizingImageGroupFinder
+        This method is going to be using the binarizer and a new Class of BinaryGroupFinder groupFinder
+
+        BinaryGroupFinder
+            This is going to be inputed the binarized image as a 2d array and will be returning a list of all the places where there are 1's in the 2d array. a group is defined as everthing but diagnol. 
+    findConnectedGroups 
+        This is going to be returning a list of all the places where 1's are grouped. with their location 
+    
