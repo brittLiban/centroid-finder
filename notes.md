@@ -93,5 +93,11 @@ BinarizingImageGroupFinder
         BinaryGroupFinder
             This is going to be inputed the binarized image as a 2d array and will be returning a list of all the places where there are 1's in the 2d array. a group is defined as everthing but diagnol. 
     findConnectedGroups 
-        This is going to be returning a list of all the places where 1's are grouped. with their location 
+        This is going to be returning a list of all the places where 1's are grouped. with their location
+
+    Returning to the main method - groups list varialbe will be returning the list of all the connected 1's in the image
+
+    It continues to group each coordinate inside the groups var into a csv file
+
+    
     
