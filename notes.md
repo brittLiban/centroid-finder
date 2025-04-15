@@ -68,5 +68,14 @@ DistanceImageBinrizer
         This includes the same 
         toBinaryArray
         toBufferedImage
+
+    binarizer variable using the DistanceImageBinarizer to pass in the inforamtion of distanceFinder, targetColor, threshold
+        This will hold the information for the specific image that is going to be processed so we can later call for it to become a 2d array and then again a binary array.
+
+    binaryArray will be putting our image into a binary array based on the infromation we previously passed into it when creating binarizer as a ImageBinarizer
+
+    binarryImage will create a image based on the binaryArray - This will produce a BLACK or White image! 
+
+    The main method continues to try to write a image using the newly created binaryImage with a try catch block. It will be a png called binarized.png - we should expect a black and white photo
     
 
