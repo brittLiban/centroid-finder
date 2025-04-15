@@ -29,3 +29,13 @@ Image Summary App
             
             A radix is essentially defining what numbering system or base we want to convert it to. Since we want hexacode, we will use a radix of 16. If we wanted a binary base we would use a number like 2
 
+        It creates a new ColorDistanceFinder variable called distanceFinder that is build on the EuclideanColorDistance
+
+ColorDistanceFinder
+    This is a interface that defines the distance between two different colors. They are taken in as parameters
+EuclideanColorDistance
+    This will be implementing ColorDistanceFinder and overides the inherited method
+
+    This is going to be taking in TWO hexacodes and doing some logic to ID the difference between two different hexacode colors using bitwise operations?
+
+
