@@ -16,5 +16,16 @@ Image Summary App
             inputImagePath
         - The second is going to be to store the target color
             hexTargetColor
+        - It is going to create a third int variable for the threshold which again is going to be the 3rd argument from the command line via a try catch 
 
+        It then goes on to make a BufferedImage variable
+            -   From my understading, this is making the picture into a plane where each pixel or some portion of the picture is broken down into coordinates. 
+        
+        With the new BufferedImage var called inputImage
+            It goes onto read the new image from the inputImagePath variable we defined which is sourced from the user input in the argument command. This is also done in a try catch 
+    
+        int target is created and generated our hexacode Number
+            This is done by doing a parseInt passing in the hexTargetColor variable which is sourced from the user input and a arguemnt and as a second parameter the radix of 16.
+            
+            A radix is essentially defining what numbering system or base we want to convert it to. Since we want hexacode, we will use a radix of 16. If we wanted a binary base we would use a number like 2
 
