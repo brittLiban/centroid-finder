@@ -34,6 +34,20 @@ public class DfsBinaryGroupFinder implements BinaryGroupFinder {
     @Override
     public List<Group> findConnectedGroups(int[][] image) {
         return null;
+
+    }
+
+    public static int[] oneFinder(int[][] image){
+
+        for(int r=0; r > image[r].length; r++){
+            for(int c=0; c > image[c].length; c++){
+                if(image[r][c] == 1){
+                    return new int[]{r,c};
+                }
+            }
+        }
+
+        throw new IllegalArgumentException("There isn't any 1's");
     }
     
 }
