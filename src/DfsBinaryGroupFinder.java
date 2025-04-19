@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class DfsBinaryGroupFinder implements BinaryGroupFinder {
@@ -41,89 +42,74 @@ public class DfsBinaryGroupFinder implements BinaryGroupFinder {
      */
     @Override
     public List<Group> findConnectedGroups(int[][] image) {
-        int[] startingPoint = oneFinder(image);
-        //fix the size of the boolean later to make it more robust
+
+        if (image == null) throw new NullPointerException();
+        if (image.length == 0 || image[0] == null || image[0].length == 0) {
+            throw new IllegalArgumentException();
+        }
+
         boolean[][] visited = new boolean[image.length][image[0].length];
+        List<Group> groups = new ArrayList<>();
 
-        List<int[]> allTheOnes = 
+        for (int r = 0; r < image.length; r++) {
+            for (int c = 0; c < image[0].length; c++) {
+                if (image[r][c] == 1 && !visited[r][c]) {
+                    // dfs to grab the whole blob
+                    List<int[]> blob = findConnectedGroups(image, new int[]{r, c}, visited);
+                    int size  = blob.size();
+                    int sumX  = 0;
+                    int sumY  = 0;
+                    // p[0] = row (y), p[1] = col (x)
+                    for (int[] p : blob) {
+                    sumY += p[0];
+                    sumX += p[1];
+                    }
 
-    }
-
-    public static int[] oneFinder(int[][] image) {
-
-        for (int r = 0; r > image[r].length; r++) {
-            for (int c = 0; c > image[c].length; c++) {
-                if (image[r][c] == 1) {
-                    return new int[] { r, c };
-                }
+                    Coordinate centroid = new Coordinate(sumX / size, sumY / size); 
+                    groups.add(new Group(size, centroid));                     
+               }
             }
         }
 
-        throw new IllegalArgumentException("There isn't any 1's");
+        Collections.sort(groups);   
+        return groups;
     }
-
+    // helper to find the four neighbour 1‑pixels of current
     public static List<int[]> connectedOnes(int[][] image, int[] current) {
-        int curR = current[0];
-        int curC = current[1];
-        List<int[]> connectedOnesList = new ArrayList<>();
+        int curR = current[0], curC = current[1];
+        List<int[]> connected = new ArrayList<>();
 
         // UP
-        int newR = curR - 1;
-        int newC = curC;
-        if (newR >= 0 && image[newR][newC] == 1) {
-            connectedOnesList.add(new int[] { newR, newC });
-        }
+        int newR = curR - 1, newC = curC;
+        if (newR >= 0 && image[newR][newC] == 1) connected.add(new int[]{newR, newC});
 
         // DOWN
-        newR = curR + 1;
-        newC = curC;
-        if (newR < image.length && image[newR][newC] == 1) {
-            connectedOnesList.add(new int[] { newR, newC });
-        }
+        newR = curR + 1; newC = curC;
+        if (newR < image.length && image[newR][newC] == 1) connected.add(new int[]{newR, newC});
 
         // LEFT
-        newR = curR;
-        newC = curC - 1;
-        if (newC >= 0 && image[newR][newC] == 1) {
-            connectedOnesList.add(new int[] { newR, newC });
-        }
+        newR = curR; newC = curC - 1;
+        if (newC >= 0 && image[newR][newC] == 1) connected.add(new int[]{newR, newC});
 
         // RIGHT
-        newR = curR;
-        newC = curC + 1;
-        if (newC < image[0].length && image[newR][newC] == 1) {
-            connectedOnesList.add(new int[] { newR, newC });
-        }
+        newR = curR; newC = curC + 1;
+        if (newC < image[0].length && image[newR][newC] == 1) connected.add(new int[]{newR, newC});
 
-        return connectedOnesList;
-
+        return connected;
     }
-
+       //depth first search gather one whole blob of 1‑pixels
     public static List<int[]> findConnectedGroups(int[][] image, int[] current, boolean[][] visited) {
-        int curR = current[0];
-        int curC = current[1];
 
-        if (visited[curR][curC])
-            return new ArrayList<>();
-
-        // this one does have a reach goal like food, it just wants to know all the
-        // possible locals!
+        int curR = current[0], curC = current[1];
+        if (visited[curR][curC]) return new ArrayList<>();
 
         visited[curR][curC] = true;
-
         List<int[]> result = new ArrayList<>();
-        // ADDING THE CURRENT ITTERATION LOCALE TO THE POSSIBLE MOVES
-        // only adding a local to the list WHEN AND IF WE VISIT IT
-        // how can this problematic?
         result.add(current);
 
-        // grabbing all the possible moves using the POSSIBLE MOVES method... FOR THE
-        // CURRENT ITERATION
-        List<int[]> moves = connectedOnes(image, current);
-        for (int[] move : moves) {
-            result.addAll(findConnectedGroups(image, move, visited));
+        for (int[] next : connectedOnes(image, current)) {
+            result.addAll(findConnectedGroups(image, next, visited));
         }
-
         return result;
     }
 }
