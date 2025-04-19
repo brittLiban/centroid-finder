@@ -21,4 +21,21 @@ public class EuclideanColorDistance implements ColorDistanceFinder {
     public double distance(int colorA, int colorB) {
         return 0;
     }
+
+
+     /**
+     *comments which will help us for progressing on wave 3
+     * Helper method extract the individual red, green, and blue components
+     * from a 24‑bit hex color (0xRRGGBB).  
+     * Returns an int array where:
+     *   index 0  red   (0‑255)
+     *   index 1  green (0‑255)
+     *   index 2  blue  (0‑255)
+     * we can reuse this array to simplify the distance calculation.
+     */
+    private int[] rgb(int color) {
+        // extract red, green, blue (all 0‑255)
+        return 0;
+    }
+    
 }
