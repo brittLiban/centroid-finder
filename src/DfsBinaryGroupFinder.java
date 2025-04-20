@@ -71,7 +71,8 @@ public class DfsBinaryGroupFinder implements BinaryGroupFinder {
             }
         }
 
-        Collections.sort(groups);   
+        Collections.sort(groups, Collections.reverseOrder());
+ 
         return groups;
     }
     // helper to find the four neighbour 1‑pixels of current
