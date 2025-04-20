@@ -36,8 +36,12 @@ public class EuclideanColorDistance implements ColorDistanceFinder {
 
      //continue working on wave 3
     private int[] rgb(int color) {
-        // extract red, green, blue (all 0‑255)
-        return 0;
+        // extract red, green, blue
+        int red = (color >> 16) & 0xFF;
+        int green = (color >> 8) & 0xFF;
+        int blue = color & 0xFF;
+
+        return new int[] {red, green, blue};
     }
     
 }
