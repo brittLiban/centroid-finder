@@ -112,7 +112,7 @@ public class DfsBinaryGroupFinderTest {
         int[][] img = { null };
         assertThrows(IllegalArgumentException.class, () -> finder.findConnectedGroups(img));
     }
-
+    //These two tests fails have to go back and check
     /** Jagged (non‑rectangular) grid must throw IllegalArgumentException */
     @Test
     public void jaggedGridThrows() {
