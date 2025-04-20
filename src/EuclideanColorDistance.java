@@ -17,30 +17,31 @@ public class EuclideanColorDistance implements ColorDistanceFinder {
      * @param colorB the second color as a 24-bit hex RGB integer
      * @return the Euclidean distance between the two colors
      */
+  
     @Override
-    public double distance(int colorA, int colorB) {
-        return 0;
-    }
+    public double distance(int color1, int color2) {
+        //Extract the red, green, and blue components from each color
+        int[] rgb1 = rgb(color1);
+        int[] rgb2 = rgb(color2);
+        
+        //compute the difference for each channel
+        int deltaRed   = rgb1[0] - rgb2[0];
+        int deltaGreen = rgb1[1] - rgb2[1];
+        int deltaBlue  = rgb1[2] - rgb2[2];
+
+        
+        return Math.sqrt(deltaRed * deltaRed + deltaGreen * deltaGreen + deltaBlue * deltaBlue);
+    };
 
 
-     /**
-     *comments which will help us for progressing on wave 3
-     * Helper method extract the individual red, green, and blue components
-     * from a 24‑bit hex color (0xRRGGBB).  
-     * Returns an int array where:
-     *   index 0  red   (0‑255)
-     *   index 1  green (0‑255)
-     *   index 2  blue  (0‑255)
-     * we can reuse this array to simplify the distance calculation.
-     */
-
-     //continue working on wave 3
+    //this helper method splits a 24‑bit RGB integer into its separate red, green, and blue components.
     private int[] rgb(int color) {
         // extract red, green, blue
         int red = (color >> 16) & 0xFF;
         int green = (color >> 8) & 0xFF;
         int blue = color & 0xFF;
-
+        
+         // Return the three channels in an array
         return new int[] {red, green, blue};
     }
     
