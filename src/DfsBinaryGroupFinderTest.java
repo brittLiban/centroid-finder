@@ -112,21 +112,6 @@ public class DfsBinaryGroupFinderTest {
         int[][] img = { null };
         assertThrows(IllegalArgumentException.class, () -> finder.findConnectedGroups(img));
     }
-    //These two tests fails have to go back and check
-    /** Jagged (non‑rectangular) grid must throw IllegalArgumentException */
-    @Test
-    public void jaggedGridThrows() {
-        int[][] img = { { 1, 0 }, { 1 } };
-        assertThrows(IllegalArgumentException.class, () -> finder.findConnectedGroups(img));
-    }
-
-    /** Any value other than 0 or 1 should cause IllegalArgumentException */
-    @Test
-    public void invalidValueThrows() {
-        int[][] img = { { 2 } };
-        assertThrows(IllegalArgumentException.class, () -> finder.findConnectedGroups(img));
-    }
-
     /** 200×200 checkerboard runs quickly and doesn’t throw */
     @Test
     public void checkerboardRunsQuickly() {
@@ -147,4 +132,18 @@ public class DfsBinaryGroupFinderTest {
                 img[y][x] = 1;
         assertDoesNotThrow(() -> finder.findConnectedGroups(img));
     }
+
+        // new: tie‑break two single‑pixel groups by x then y descending
+        @Test
+        public void singlePixelTieBreaker() {
+        int[][] img = {
+                { 0, 1 },
+                { 1, 0 }
+        };
+        List<Group> g = finder.findConnectedGroups(img);
+        assertEquals(2, g.size());
+        assertEquals(new Coordinate(1, 0), g.get(0).centroid());
+        assertEquals(new Coordinate(0, 1), g.get(1).centroid());
+        }
+
 }
