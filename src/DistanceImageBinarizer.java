@@ -10,6 +10,8 @@ import java.awt.image.BufferedImage;
  * 
  * The color distance is computed using a provided ColorDistanceFinder, which defines how to compare two colors numerically.
  * The targetColor is represented as a 24-bit RGB integer in the form 0xRRGGBB.
+ * 
+ * // Liban - Some initial thoughts - consider translating the rgb code to the actual number?
  */
 public class DistanceImageBinarizer implements ImageBinarizer {
     private final ColorDistanceFinder distanceFinder;
@@ -49,9 +51,17 @@ public class DistanceImageBinarizer implements ImageBinarizer {
             throw new NullPointerException("Input image cannot be null");
         }
 
-        //
+        //getting the width and height of the image
         int width  = image.getWidth();
         int height = image.getHeight();
+
+
+        int[][] numberizedImage = new int[width][height];
+
+        // look through image
+        //create an array
+        // if the current pixel is relevantly close to the wanted number, then mark it as one
+        // if not, then its zero
           
         
       return null;
@@ -67,6 +77,7 @@ public class DistanceImageBinarizer implements ImageBinarizer {
      */
     @Override
     public BufferedImage toBufferedImage(int[][] image) {
+        //image is getting passed in as a 2d array
         //number of rows and columns in binary array
         int height = image.length;
         int width  = image[0].length;
