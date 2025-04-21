@@ -100,7 +100,7 @@ public class DistanceImageBinarizer implements ImageBinarizer {
          * to get color lets do image.getRGB(x,y)
          */
 
-        int[][] numberizedImage = new int[width][height];
+        int[][] numberizedImage = new int[height][width];
 
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
