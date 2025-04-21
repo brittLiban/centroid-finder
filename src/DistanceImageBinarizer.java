@@ -56,7 +56,29 @@ public class DistanceImageBinarizer implements ImageBinarizer {
         int height = image.getHeight();
 
 
+        /*
+         * 00000000 - y
+         *     x
+         * (0,9)(2,2)(4,4)
+         * 
+         * 
+         * EACH position in the array is a x - y coordinate that also holds the
+         * COLOR for that specific pixel as well. 
+         * 
+         * to get color lets do image.getRGB(x,y)
+         */
+
         int[][] numberizedImage = new int[width][height];
+
+        for(int y = 0; y < height; y++){
+            for(int x = 0; x < width; x++){
+                int rgb = image.getRGB(x, y);
+
+                // do we need to evaluate how close this is to the target? 
+                // I believe the answer is yes
+                if(rgb)
+            }
+        }
 
         // look through image
         //create an array
