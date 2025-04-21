@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class DfsBinaryGroupFinder implements BinaryGroupFinder {
     /**
@@ -101,18 +103,46 @@ public class DfsBinaryGroupFinder implements BinaryGroupFinder {
         return connected;
     }
        //depth first search gather one whole blob of 1‑pixels
-    public static List<int[]> findConnectedGroups(int[][] image, int[] current, boolean[][] visited) {
 
-        int curR = current[0], curC = current[1];
-        if (visited[curR][curC]) return new ArrayList<>();
+       // changing this to a bfs using queue
+      
+       
+       public static List<int[]> findConnectedGroups(int[][] image, int[] start, boolean[][] visited) {
+           List<int[]> result = new ArrayList<>();
+           // a queue in a bfs is a linkedlist like the example, always made like this? 
+           Queue<int[]> queue = new LinkedList<>();
+       
+           int startR = start[0];
+           int startC = start[1];
+       
+           //marking the pixel as already visited so you don't visit it again 
+           visited[startR][startC] = true;
 
-        visited[curR][curC] = true;
-        List<int[]> result = new ArrayList<>();
-        result.add(current);
+           //feeding something into the queue for the first time
+           queue.add(new int[]{startR, startC});
+       
+           while (!queue.isEmpty()) {
+            //popping off the the first thing in the queue to get a current -- looks like {x, y}
+               int[] current = queue.poll();
+               int curR = current[0];
+               int curC = current[1];
 
-        for (int[] next : connectedOnes(image, current)) {
-            result.addAll(findConnectedGroups(image, next, visited));
-        }
-        return result;
-    }
+               //adding the current into the results array to return later. 
+               result.add(new int[]{curR, curC}); // snapshot of current
+       
+               for (int[] neighbor : connectedOnes(image, current)) {
+                    // a loop that will check with all the of the neighbors of the current location
+                   int r = neighbor[0];
+                   int c = neighbor[1];
+                   if (!visited[r][c]) {
+                       visited[r][c] = true;
+                       //if it isn't been visited - make it so it has been first, then add it to the queue.
+                       queue.add(new int[]{r, c});
+                   }
+               }
+           }
+       
+           return result;
+       }
+       
 }
