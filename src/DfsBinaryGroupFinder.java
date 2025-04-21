@@ -71,6 +71,8 @@ public class DfsBinaryGroupFinder implements BinaryGroupFinder {
             }
         }
 
+
+        //is this the part that sorts everything? - Liban
         Collections.sort(groups, Collections.reverseOrder());
  
         return groups;
