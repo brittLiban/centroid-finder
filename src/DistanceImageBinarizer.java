@@ -46,70 +46,90 @@ public class DistanceImageBinarizer implements ImageBinarizer {
     }
 
     /**
-     * Converts the given BufferedImage into a binary 2D array using color distance and a threshold.
-     * Each entry in the returned array is either 0 or 1, representing a black or white pixel.
-     * A pixel is white (1) if its Euclidean distance to the target color is less than the threshold.
+     * Converts the given BufferedImage into a binary 2D array using color distance
+     * and a threshold.
+     * Each entry in the returned array is either 0 or 1, representing a black or
+     * white pixel.
+     * A pixel is white (1) if its Euclidean distance to the target color is less
+     * than the threshold.
      *
      * @param image the input RGB BufferedImage
      * @return a 2D binary array where 1 represents white and 0 represents black
      */
     @Override
     public int[][] toBinaryArray(BufferedImage image) {
-        if(image == null){
+        if (image == null) {
             throw new NullPointerException("Input image cannot be null");
         }
 
-        //getting the width and height of the image
-        int width  = image.getWidth();
+        // getting the width and height of the image
+        int width = image.getWidth();
         int height = image.getHeight();
 
-        //evaluating it for the red
-        // this whats in the front over 16 bits/or really shifts everything down. 
-        //255 to see what our red is 
+        // evaluating it for the red
+        // this whats in the front over 16 bits/or really shifts everything down.
+        // 255 to see what our red is
 
-        //remember
+        // remember
         // FF = 11111111
         // if a number is not 1 it will return 0
-        // - essentially remember with hexacode, if a number is for ex in the 16th place,
-        //mult that number by 16 and you get that number.
+        // - essentially remember with hexacode, if a number is for ex in the 16th
+        // place,
+        // mult that number by 16 and you get that number.
         // when in hexacode each individual digit represetns 4 in binary
-        // so when evaluating a hexacode # - do 16^x - x being what ever place it is in. 
+        // so when evaluating a hexacode # - do 16^x - x being what ever place it is in.
         // Example: 0x7C = (7 * 16^1) + (C * 16^0)
-        //        = (7 * 16) + (12 * 1) = 112 + 12 = 124
-        int r = (targetColor >> 16) & 0xFF;
+        // = (7 * 16) + (12 * 1) = 112 + 12 = 124
 
+
+        // THIS WAS WHAT WE WERE GOING TO HAVE TO DO IF WE ALREADY DIDN"T HAVE THE DISTANCE FORMULA IN THE DISTANCE IMAGE BINARIZER
+        
+        // int rTarget = (targetColor >> 16) & 0xFF;
+        // int gTarget = (targetColor >> 0) & 0xFF;
+        // int bTarget = targetColor & 0xFF;
 
         /*
          * 00000000 - y
-         *     x
+         * x
          * (0,9)(2,2)(4,4)
          * 
          * 
          * EACH position in the array is a x - y coordinate that also holds the
-         * COLOR for that specific pixel as well. 
+         * COLOR for that specific pixel as well.
          * 
          * to get color lets do image.getRGB(x,y)
          */
 
         int[][] numberizedImage = new int[width][height];
 
-        for(int y = 0; y < height; y++){
-            for(int x = 0; x < width; x++){
-                int rgb = image.getRGB(x, y);
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                // this will return the RGB for the current position
+                int currentRGB = image.getRGB(x, y) & 0xFFFFFF;
 
-                // do we need to evaluate how close this is to the target? 
+                // taking the current rgb down to its rs
+                double distance = distanceFinder.distance(currentRGB, targetColor);
+
+                if (distance <= threshold) {
+                    numberizedImage[y][x] = 1;
+                } else {
+                    numberizedImage[y][x] = 0;
+                }
+
+                // do we need to evaluate how close this is to the target?
                 // I believe the answer is yes
-                if(rgb)
+
             }
+
         }
 
         // look through image
-        //create an array
-        // if the current pixel is relevantly close to the wanted number, then mark it as one
+        // create an array
+        // if the current pixel is relevantly close to the wanted number, then mark it
+        // as one
         // if not, then its zero
-          
-        
-      return null;
+
+        return numberizedImage;
     }
 
     /**
