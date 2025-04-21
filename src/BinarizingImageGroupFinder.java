@@ -40,6 +40,9 @@ public class BinarizingImageGroupFinder implements ImageGroupFinder {
     @Override
     public List<Group> findConnectedGroups(BufferedImage image) {
 
+        if(image == null){
+            throw new NullPointerException("The image can't be null... try again?");
+        }
         //making it 1 and 0s
         int[][] binary = binarizer.toBinaryArray(image);
 
