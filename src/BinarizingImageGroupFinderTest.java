@@ -121,4 +121,45 @@ public class BinarizingImageGroupFinderTest {
         assertEquals(16, groups.get(0).size());
         assertEquals(new Coordinate(1, 1), groups.get(0).centroid()); // center of 4x4 grid
     }
+
+    @Test
+    void testConnectedHorizontalGroup() {
+        BufferedImage img = new BufferedImage(3, 1, BufferedImage.TYPE_INT_RGB);
+        img.setRGB(0, 0, MATCH);
+        img.setRGB(1, 0, MATCH);
+        img.setRGB(2, 0, MATCH);
+
+        List<Group> groups = imageGroupFinder.findConnectedGroups(img);
+
+        assertEquals(1, groups.size());
+        assertEquals(3, groups.get(0).size());
+        assertEquals(new Coordinate(1, 0), groups.get(0).centroid()); // (0+1+2)/3 = 1, y = 0
+    }
+
+    @Test
+    void testDiagonalPixelsShouldBeSeparateGroups() {
+        BufferedImage img = new BufferedImage(2, 2, BufferedImage.TYPE_INT_RGB);
+        img.setRGB(0, 0, MATCH);
+        img.setRGB(1, 1, MATCH); // diagonally across
+
+        List<Group> groups = imageGroupFinder.findConnectedGroups(img);
+
+        assertEquals(2, groups.size());
+        assertTrue(groups.stream().allMatch(g -> g.size() == 1));
+    }
+
+    @Test
+    void testNonSquareImageMixedGroups() {
+        BufferedImage img = new BufferedImage(2, 3, BufferedImage.TYPE_INT_RGB);
+        img.setRGB(0, 0, MATCH);
+        img.setRGB(0, 1, MATCH);
+        img.setRGB(1, 2, MATCH); // isolated
+
+        List<Group> groups = imageGroupFinder.findConnectedGroups(img);
+
+        assertEquals(2, groups.size());
+        assertTrue(groups.stream().anyMatch(g -> g.size() == 2));
+        assertTrue(groups.stream().anyMatch(g -> g.size() == 1));
+}
+
 }
