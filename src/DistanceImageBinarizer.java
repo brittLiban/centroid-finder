@@ -157,10 +157,10 @@ public class DistanceImageBinarizer implements ImageBinarizer {
                 int bit = image[y][x];
                 int rgbColor;
                 if (bit == 1) {
-                    rgbColor = 0xFFFFFF;
+                    rgbColor = 0xFFFF00; // yellow for sticky note pixels
                 } else {
-                    rgbColor = 0x000000;
-                }
+                    rgbColor = 0xFFFFFF; // white for everything else
+                }                
                 out.setRGB(x, y, rgbColor);
             }
         }
