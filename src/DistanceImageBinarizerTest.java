@@ -156,4 +156,48 @@ class DistanceImageBinarizerTest {
         assertArrayEquals(expected[1], result[1]);
     }
 
+    @Test
+    void testToBinaryArray_nonSquareImage_shouldReturnCorrectDimensions() {
+        BufferedImage image = new BufferedImage(2, 3, BufferedImage.TYPE_INT_RGB);
+        for (int y = 0; y < 3; y++) {
+            for (int x = 0; x < 2; x++) {
+                image.setRGB(x, y, 0x123456); // matching color
+            }
+        }
+
+        DistanceImageBinarizer binarizer = new DistanceImageBinarizer(new FakeDistanceFinder(), 0x123456, 10);
+        int[][] result = binarizer.toBinaryArray(image);
+
+        assertEquals(3, result.length);     
+        assertEquals(2, result[0].length);    
+    }
+
+    @Test
+    void testToBinaryArray_pixelDistanceJustOverThreshold_shouldBeBlack() {
+        ColorDistanceFinder almostMatch = (a, b) -> 10.01;
+
+        BufferedImage image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
+        image.setRGB(0, 0, 0x123456);
+
+        DistanceImageBinarizer binarizer = new DistanceImageBinarizer(almostMatch, 0x123456, 10);
+        int[][] result = binarizer.toBinaryArray(image);
+
+        assertEquals(0, result[0][0]); 
+    }
+    
+    @Test
+    void testToBufferedImage_shouldHaveMatchingDimensions() {
+        int[][] binary = {
+            {1, 0},
+            {0, 1},
+            {1, 1}
+        };
+
+        DistanceImageBinarizer binarizer = new DistanceImageBinarizer(new FakeDistanceFinder(), 0, 0);
+        BufferedImage output = binarizer.toBufferedImage(binary);
+
+        assertEquals(2, output.getWidth());
+        assertEquals(3, output.getHeight());
+    }
+
 }
