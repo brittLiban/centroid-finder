@@ -1,4 +1,4 @@
-public class PerceptualColorDistance {
+public class PerceptualColorDistance implements ColorDistanceFinder{
 
     /**
      * Calculates the perceptual color difference between two RGB colors
@@ -8,6 +8,12 @@ public class PerceptualColorDistance {
      * @param rgb2 the second color (0xRRGGBB)
      * @return the perceptual distance (ΔE) between the two colors
      */
+
+     @Override
+     public double distance(int rgb1, int rgb2) {
+         return deltaE(rgb1, rgb2);
+     }
+     
     public static double deltaE(int rgb1, int rgb2) {
         double[] lab1 = rgbToLab(rgb1); // Convert first color to Lab
         double[] lab2 = rgbToLab(rgb2); // Convert second color to Lab

@@ -63,8 +63,12 @@ public class ImageSummaryApp {
             return;
         }
         
-        // Create the DistanceImageBinarizer with a EuclideanColorDistance instance.
-        ColorDistanceFinder distanceFinder = new EuclideanColorDistance();
+        // Create the DistanceImageBinarizer with a EuclideanColorDistance instance. ****** WAVE 6 run
+            // ColorDistanceFinder distanceFinder = new EuclideanColorDistance();
+
+        // Create the DistanceImageBinarizer with a PerceptualColorDistance instance. ******* WAVe 7 run
+
+        ColorDistanceFinder distanceFinder = new PerceptualColorDistance();
         
         ImageBinarizer binarizer = new DistanceImageBinarizer(distanceFinder, targetColor, threshold);
         
