@@ -60,10 +60,10 @@ class DistanceImageBinarizerTest {
         BufferedImage output = binarizer.toBufferedImage(binaryArray);
 
         // Check specific pixel colors
-        assertEquals(0xFFFFFF, output.getRGB(0, 0) & 0xFFFFFF); // white
-        assertEquals(0x000000, output.getRGB(1, 0) & 0xFFFFFF); // black
-        assertEquals(0x000000, output.getRGB(0, 1) & 0xFFFFFF); // black
-        assertEquals(0xFFFFFF, output.getRGB(1, 1) & 0xFFFFFF); // white
+        assertEquals(0xFFFF00, output.getRGB(0, 0) & 0xFFFFFF); // yellow
+        assertEquals(0xFFFFFF, output.getRGB(1, 0) & 0xFFFFFF); // white
+        assertEquals(0xFFFFFF, output.getRGB(0, 1) & 0xFFFFFF); // white
+        assertEquals(0xFFFF00, output.getRGB(1, 1) & 0xFFFFFF); // yellow
     }
 
     @Test
