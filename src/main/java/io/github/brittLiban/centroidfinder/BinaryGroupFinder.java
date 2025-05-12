@@ -1,3 +1,6 @@
+package io.github.brittLiban.centroidfinder;
+
+
 import java.util.List;
 
 public interface BinaryGroupFinder {

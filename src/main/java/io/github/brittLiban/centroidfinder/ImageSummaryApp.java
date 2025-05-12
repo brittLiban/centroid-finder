@@ -1,3 +1,6 @@
+package io.github.brittLiban.centroidfinder;
+//REMEMBER TO INCLUDE THE PACKAGE
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.PrintWriter;

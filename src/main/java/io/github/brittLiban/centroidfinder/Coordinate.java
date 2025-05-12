@@ -1,3 +1,6 @@
+package io.github.brittLiban.centroidfinder;
+
+
 /**
  * Represents a location in an image or array
  * 
