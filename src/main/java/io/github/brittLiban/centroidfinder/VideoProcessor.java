@@ -9,8 +9,7 @@ import org.opencv.core.Mat;
 public class VideoProcessor {
     public static void main(String[] args) {
         //this is loading it in so it alllows us to load the openCV
-
-        OpenCVLoader loader = new OpenCVLoader(); // Load OpenCV
+        OpenCVLoader loader = new OpenCVLoader(); 
 
 
         if (args.length < 4) {

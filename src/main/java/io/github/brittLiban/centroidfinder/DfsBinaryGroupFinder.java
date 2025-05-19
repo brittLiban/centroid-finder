@@ -1,6 +1,5 @@
 package io.github.brittLiban.centroidfinder;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;

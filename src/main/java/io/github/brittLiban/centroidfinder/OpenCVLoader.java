@@ -1,6 +1,7 @@
 package io.github.brittLiban.centroidfinder;
 
 
+
 //this is neccesary for every single openCV project with Java. nothing will happen without this
 public class OpenCVLoader {
     static {

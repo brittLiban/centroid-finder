@@ -1,4 +1,3 @@
-
 package io.github.brittLiban.centroidfinder;
 
 import java.util.List;
