@@ -19,7 +19,7 @@ public class VideoProcessor {
 
         String inputPath = args[0];
         String outPutCSV = args[1];
-        String targetColorHex = args[2];
+        String hexTargetColor = args[2];
         int threshold = 0;
 
         try {
@@ -29,6 +29,15 @@ public class VideoProcessor {
             return;
         }
 
+
+        // Parse the target color from a hex string (format RRGGBB) into a 24-bit integer (0xRRGGBB)
+        int targetColor = 0;
+        try {
+            targetColor = Integer.parseInt(hexTargetColor, 16);
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid hex target color. Please provide a color in RRGGBB format.");
+            return;
+        }
         
 
     }
