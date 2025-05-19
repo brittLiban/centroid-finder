@@ -17,7 +17,7 @@ import javafx.util.Duration;
 import javax.imageio.ImageIO;
 import java.io.File;
 
-public class VideoTestApp extends Application {
+public class OldVideoTestApp extends Application {
   @Override
   public void start(Stage stage) throws Exception {
     // 1. load video from project root
