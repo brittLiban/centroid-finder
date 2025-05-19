@@ -1,0 +1,1 @@
+The goal is to use Java Fx to intake a video, be able to evaluate the size of the salamender, derive enough infromation to produce a x and y coordinates of the largest salamender at any given time fora duration of the video,
