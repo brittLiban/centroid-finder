@@ -1,12 +1,19 @@
 package io.github.brittLiban.centroidfinder;
 
-import java.io.File;
+import org.opencv.core.Core;
+import org.opencv.videoio.VideoCapture;
+import org.opencv.core.Mat;
 
-import javax.imageio.ImageIO;
+//this is neccesary for every single openCV project with Java. nothing will happen without this
 
 public class VideoProcessor {
     public static void main(String[] args) {
-        if (args.length < 3) {
+        //this is loading it in so it alllows us to load the openCV
+
+        OpenCVLoader loader = new OpenCVLoader(); // Load OpenCV
+
+
+        if (args.length < 4) {
             System.out.println("Usage: java -jar videoprocessor.jar <inputPath> <outputCsv> <targetColor> <threshold>");
         return;
         }
@@ -17,7 +24,7 @@ public class VideoProcessor {
         int threshold = 0;
 
         try {
-            threshold = Integer.parseInt(args[2]);
+            threshold = Integer.parseInt(args[3]);
         } catch (NumberFormatException e) {
             System.err.println("Threshold must be an integer.");
             return;
@@ -27,3 +34,4 @@ public class VideoProcessor {
 
     }
 }
+ 

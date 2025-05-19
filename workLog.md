@@ -12,3 +12,9 @@ TO
 
 mvn exec:java -Dexec.args="sampleInput/squares.jpg FFA200 164"
 
+
+Video assigment due on 5/19
+
+1 - Download OpenCV 
+https://github.com/opencv/opencv/releases
+mvn install:install-file -Dfile="C:/Users/liban/Documents/opencv/build/java/opencv-4110.jar" -DgroupId=org.opencv -DartifactId=opencv -Dversion=4.11.0 -Dpackaging=jar
