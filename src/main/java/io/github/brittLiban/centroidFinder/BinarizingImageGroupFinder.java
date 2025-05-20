@@ -1,3 +1,4 @@
+package io.github.brittLiban.centroidFinder;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
