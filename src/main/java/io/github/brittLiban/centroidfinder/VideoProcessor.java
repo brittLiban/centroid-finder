@@ -17,9 +17,9 @@ public class VideoProcessor {
         OpenCVLoader loader = new OpenCVLoader();
 
         // seeing how many frames are getting used per second.
-        VideoCapture cap = new VideoCapture("ensantina.mp4");
-        double fps = cap.get(Videoio.CAP_PROP_FPS);
-        System.out.println(fps);
+       // VideoCapture cap = new VideoCapture("ensantina.mp4");
+        //double fps = cap.get(Videoio.CAP_PROP_FPS);
+        //System.out.println(fps);
 
         if (args.length < 4) {
             System.out.println("Usage: java -jar videoprocessor.jar <inputPath> <outputCsv> <targetColor> <threshold>");
@@ -56,7 +56,9 @@ public class VideoProcessor {
         }
 
         VideoAnalyzer analyze = new VideoAnalyzer();
-        List<BufferedImage> frames = analyze.processVideo(video, 24); // updating the method so now it does 1 frame
+        double fps = video.get(Videoio.CAP_PROP_FPS);
+        List<BufferedImage> frames = analyze.processVideo(video, (int) fps); // same as below except dynamcially getting the fps and casting
+        //List<BufferedImage> frames = analyze.processVideo(video, 24); // updating the method so now it does 1 frame
                                                                       // every 23 seconds. Reducing the time by 24x
 
         // Set up centroid logic
@@ -64,19 +66,31 @@ public class VideoProcessor {
         ImageBinarizer binarizer = new DistanceImageBinarizer(distanceFinder, targetColor, threshold);
         ImageGroupFinder groupFinder = new BinarizingImageGroupFinder(binarizer, new DfsBinaryGroupFinder());
 
-        try (PrintWriter writer = new PrintWriter("videoResults.csv")) {
+        try (PrintWriter writer = new PrintWriter(outPutCSV)) {
             writer.println("frame,size,x,y"); // CSV header
 
-            int frameIndex = 0;
+            int second = 0;
+
             for (BufferedImage frame : frames) {
                 List<Group> groups = groupFinder.findConnectedGroups(frame);
-                for (Group group : groups) {
-                    writer.println(frameIndex + "," + group.toCsvRow());
+
+                Group largest = null;
+                for (Group g : groups) {
+                    if (largest == null || g.size() > largest.size()) {
+                        largest = g;
+                    }
                 }
-                frameIndex++;
+
+                if (largest != null) {
+                    writer.println(second + ",(" + largest.centroid().x() + "," + largest.centroid().y() + ")");
+                } else {
+                    writer.println(second + ",-1,-1");
+                }
+
+                second++;
             }
 
-            System.out.println("Video processing complete. CSV saved to " + "videoResults.csv");
+            System.out.println("Video processing complete. CSV saved to " + outPutCSV);
         } catch (Exception e) {
             System.err.println("Error writing CSV.");
             e.printStackTrace();

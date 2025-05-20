@@ -32,3 +32,11 @@ Number of channels (e.g. 1 for grayscale, 3 for color)
 Pixel data (stored as a byte array internally)
 
 Type (e.g. CV_8UC3 for 8-bit unsigned 3-channel image)
+
+
+How was a color selected- I took a screen shot and went to a color identifier site - 5d0213 
+The threshold was selected at random to be honest. Felt like 60 was fair
+
+Final Command
+
+java -jar target/centroidfinder-1.0-SNAPSHOT-jar-with-dependencies.jar ensantina.mp4 videoResults.csv 5d0213 60
