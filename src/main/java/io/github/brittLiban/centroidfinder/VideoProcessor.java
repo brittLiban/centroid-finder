@@ -57,7 +57,7 @@ public class VideoProcessor {
 
         VideoAnalyzer analyze = new VideoAnalyzer();
         double fps = video.get(Videoio.CAP_PROP_FPS);
-        List<BufferedImage> frames = analyze.processVideo(video, (int) fps); // same as below except dynamcially getting
+        List<BufferedImage> frames = analyze.processVideo(video, 24); // same as below except dynamcially getting
                                                                              // the fps and casting
         // List<BufferedImage> frames = analyze.processVideo(video, 24); // updating the
         // method so now it does 1 frame
