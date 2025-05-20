@@ -1,6 +1,7 @@
 package io.github.brittLiban.centroidfinder;
 
 import java.awt.image.BufferedImage;
+import java.io.PrintWriter;
 import java.util.List;
 
 import org.opencv.core.Core;
@@ -12,17 +13,17 @@ import org.opencv.core.Mat;
 
 public class VideoProcessor {
     public static void main(String[] args) {
-        //this is loading it in so it alllows us to load the openCV
-        OpenCVLoader loader = new OpenCVLoader(); 
+        // this is loading it in so it alllows us to load the openCV
+        OpenCVLoader loader = new OpenCVLoader();
 
-        //seeing how many frames are getting used per second. 
+        // seeing how many frames are getting used per second.
         VideoCapture cap = new VideoCapture("ensantina.mp4");
         double fps = cap.get(Videoio.CAP_PROP_FPS);
         System.out.println(fps);
 
         if (args.length < 4) {
             System.out.println("Usage: java -jar videoprocessor.jar <inputPath> <outputCsv> <targetColor> <threshold>");
-        return;
+            return;
         }
 
         String inputPath = args[0];
@@ -37,8 +38,8 @@ public class VideoProcessor {
             return;
         }
 
-
-        // Parse the target color from a hex string (format RRGGBB) into a 24-bit integer (0xRRGGBB)
+        // Parse the target color from a hex string (format RRGGBB) into a 24-bit
+        // integer (0xRRGGBB)
         int targetColor = 0;
         try {
             targetColor = Integer.parseInt(hexTargetColor, 16);
@@ -46,8 +47,8 @@ public class VideoProcessor {
             System.err.println("Invalid hex target color. Please provide a color in RRGGBB format.");
             return;
         }
-        
-        //taking in the video file 
+
+        // taking in the video file
         VideoCapture video = new VideoCapture(inputPath);
         if (!video.isOpened()) {
             System.err.println("Failed to open video file: " + inputPath);
@@ -55,9 +56,31 @@ public class VideoProcessor {
         }
 
         VideoAnalyzer analyze = new VideoAnalyzer();
-        List<BufferedImage> frames  = analyze.processVideo(video, 24); //updating the method so now it does 1 frame every 23 seconds. Reducing the time by 24x
-        
-        
+        List<BufferedImage> frames = analyze.processVideo(video, 24); // updating the method so now it does 1 frame
+                                                                      // every 23 seconds. Reducing the time by 24x
+
+        // Set up centroid logic
+        ColorDistanceFinder distanceFinder = new EuclideanColorDistance();
+        ImageBinarizer binarizer = new DistanceImageBinarizer(distanceFinder, targetColor, threshold);
+        ImageGroupFinder groupFinder = new BinarizingImageGroupFinder(binarizer, new DfsBinaryGroupFinder());
+
+        try (PrintWriter writer = new PrintWriter("videoResults.csv")) {
+            writer.println("frame,size,x,y"); // CSV header
+
+            int frameIndex = 0;
+            for (BufferedImage frame : frames) {
+                List<Group> groups = groupFinder.findConnectedGroups(frame);
+                for (Group group : groups) {
+                    writer.println(frameIndex + "," + group.toCsvRow());
+                }
+                frameIndex++;
+            }
+
+            System.out.println("Video processing complete. CSV saved to " + "videoResults.csv");
+        } catch (Exception e) {
+            System.err.println("Error writing CSV.");
+            e.printStackTrace();
+        }
     }
+
 }
- 
