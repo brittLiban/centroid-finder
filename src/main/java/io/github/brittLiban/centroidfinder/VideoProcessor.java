@@ -39,7 +39,16 @@ public class VideoProcessor {
             return;
         }
         
+        //taking in the video file 
+        VideoCapture video = new VideoCapture(inputPath);
+        if (!video.isOpened()) {
+            System.err.println("Failed to open video file: " + inputPath);
+            return;
+        }
 
+        VideoAnalyzer analyze = new VideoAnalyzer();
+        analyze.processVideo(video, outPutCSV, targetColor, threshold);
+        
     }
 }
  
