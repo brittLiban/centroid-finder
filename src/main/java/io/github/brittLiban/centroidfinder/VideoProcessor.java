@@ -17,9 +17,9 @@ public class VideoProcessor {
         OpenCVLoader loader = new OpenCVLoader();
 
         // seeing how many frames are getting used per second.
-       // VideoCapture cap = new VideoCapture("ensantina.mp4");
-        //double fps = cap.get(Videoio.CAP_PROP_FPS);
-        //System.out.println(fps);
+        // VideoCapture cap = new VideoCapture("ensantina.mp4");
+        // double fps = cap.get(Videoio.CAP_PROP_FPS);
+        // System.out.println(fps);
 
         if (args.length < 4) {
             System.out.println("Usage: java -jar videoprocessor.jar <inputPath> <outputCsv> <targetColor> <threshold>");
@@ -57,9 +57,11 @@ public class VideoProcessor {
 
         VideoAnalyzer analyze = new VideoAnalyzer();
         double fps = video.get(Videoio.CAP_PROP_FPS);
-        List<BufferedImage> frames = analyze.processVideo(video, (int) fps); // same as below except dynamcially getting the fps and casting
-        //List<BufferedImage> frames = analyze.processVideo(video, 24); // updating the method so now it does 1 frame
-                                                                      // every 23 seconds. Reducing the time by 24x
+        List<BufferedImage> frames = analyze.processVideo(video, (int) fps); // same as below except dynamcially getting
+                                                                             // the fps and casting
+        // List<BufferedImage> frames = analyze.processVideo(video, 24); // updating the
+        // method so now it does 1 frame
+        // every 23 seconds. Reducing the time by 24x
 
         // Set up centroid logic
         ColorDistanceFinder distanceFinder = new EuclideanColorDistance();
@@ -67,7 +69,7 @@ public class VideoProcessor {
         ImageGroupFinder groupFinder = new BinarizingImageGroupFinder(binarizer, new DfsBinaryGroupFinder());
 
         try (PrintWriter writer = new PrintWriter(outPutCSV)) {
-            writer.println("frame,size,x,y"); // CSV header
+            writer.println("time,x,y"); // CSV header
 
             int second = 0;
 
@@ -81,10 +83,11 @@ public class VideoProcessor {
                     }
                 }
 
+                String time = String.format("%02d:%02d", second / 60, second % 60);
                 if (largest != null) {
-                    writer.println(second + ",(" + largest.centroid().x() + "," + largest.centroid().y() + ")");
+                    writer.println(time + "," + largest.centroid().x() + "," + largest.centroid().y());
                 } else {
-                    writer.println(second + ",-1,-1");
+                    writer.println(time + ",-1,-1");
                 }
 
                 second++;
@@ -95,6 +98,6 @@ public class VideoProcessor {
             System.err.println("Error writing CSV.");
             e.printStackTrace();
         }
-    }
 
+    }
 }
