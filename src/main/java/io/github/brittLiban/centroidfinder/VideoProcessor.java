@@ -15,6 +15,7 @@ public class VideoProcessor {
         //this is loading it in so it alllows us to load the openCV
         OpenCVLoader loader = new OpenCVLoader(); 
 
+        //seeing how many frames are getting used per second. 
         VideoCapture cap = new VideoCapture("ensantina.mp4");
         double fps = cap.get(Videoio.CAP_PROP_FPS);
         System.out.println(fps);
@@ -54,7 +55,8 @@ public class VideoProcessor {
         }
 
         VideoAnalyzer analyze = new VideoAnalyzer();
-        List<BufferedImage> frames  = analyze.processVideo(video, 3);
+        List<BufferedImage> frames  = analyze.processVideo(video, 24); //updating the method so now it does 1 frame every 23 seconds. Reducing the time by 24x
+        
         
     }
 }
