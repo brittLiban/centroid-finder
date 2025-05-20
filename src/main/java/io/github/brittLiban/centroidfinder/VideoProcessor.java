@@ -47,7 +47,7 @@ public class VideoProcessor {
         }
 
         VideoAnalyzer analyze = new VideoAnalyzer();
-        analyze.processVideo(video, outPutCSV, targetColor, threshold);
+        xxx frames = analyze.processVideo(video);
         
     }
 }
