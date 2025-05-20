@@ -9,7 +9,7 @@ import java.util.List;
 
 public class VideoAnalyzer {
 
-    public List<BufferedImage> processVideo(VideoCapture video) {
+    public List<BufferedImage> processVideo(VideoCapture video, int maxFrames) {
         List<BufferedImage> frames = new ArrayList<>();
         Mat frame = new Mat();
 

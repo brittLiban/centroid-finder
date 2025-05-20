@@ -1,7 +1,11 @@
 package io.github.brittLiban.centroidfinder;
 
+import java.awt.image.BufferedImage;
+import java.util.List;
+
 import org.opencv.core.Core;
 import org.opencv.videoio.VideoCapture;
+import org.opencv.videoio.Videoio;
 import org.opencv.core.Mat;
 
 //this is neccesary for every single openCV project with Java. nothing will happen without this
@@ -11,6 +15,9 @@ public class VideoProcessor {
         //this is loading it in so it alllows us to load the openCV
         OpenCVLoader loader = new OpenCVLoader(); 
 
+        VideoCapture cap = new VideoCapture("ensantina.mp4");
+        double fps = cap.get(Videoio.CAP_PROP_FPS);
+        System.out.println(fps);
 
         if (args.length < 4) {
             System.out.println("Usage: java -jar videoprocessor.jar <inputPath> <outputCsv> <targetColor> <threshold>");
@@ -47,7 +54,7 @@ public class VideoProcessor {
         }
 
         VideoAnalyzer analyze = new VideoAnalyzer();
-        xxx frames = analyze.processVideo(video);
+        List<BufferedImage> frames  = analyze.processVideo(video, 3);
         
     }
 }
