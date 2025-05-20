@@ -35,7 +35,7 @@ Type (e.g. CV_8UC3 for 8-bit unsigned 3-channel image)
 
 
 How was a color selected- I took a screen shot and went to a color identifier site - 5d0213 
-The threshold was selected at random to be honest. Felt like 60 was fair
+The threshold was selected at random to be honest. Felt like 60 was fair. I tested by running the programming and seeing how often it would default or use the background as the targeted item in the video. Didn't happen to often so i am happy with 60. 
 
 Final Command
 
