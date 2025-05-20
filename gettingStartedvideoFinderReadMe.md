@@ -66,7 +66,7 @@ This Java project processes `.mp4` videos to detect the **largest centroid** per
 
 ## 🚀 Step 3: Run the Video Processor
 
-From the terminal in the project root, run:
+From the terminal in the project root, rud:
 
 ```bash
 java -jar target/centroidfinder-1.0-SNAPSHOT.jar <inputVideo.mp4> <output.csv> <targetColor> <threshold>
