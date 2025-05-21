@@ -1,6 +1,8 @@
 package io.github.brittLiban.centroidFinder;
 
 import java.awt.image.BufferedImage;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import org.bytedeco.javacv.FFmpegFrameGrabber;
@@ -25,12 +27,10 @@ public class VideoAnalyzing {
 
     public void process(FFmpegFrameGrabber grabber, PrintWriter toCsv) {
 
-
         // tracking how long it takes
-            long startTime = System.currentTimeMillis();
-            int processedFrames = 0;
+        long startTime = System.currentTimeMillis();
+        int processedFrames = 0;
 
-            
         // put this in a try catch so that it will close when done to avoid memeory
         // leaks ( free rent in memeory terms )
         // can id if it needs to be closed every if its AutoClosable
@@ -38,8 +38,6 @@ public class VideoAnalyzing {
         try (Java2DFrameConverter converter = new Java2DFrameConverter()) {
             // this is a class that will help us convert a raw frame from
             // javaCV into something java can handle.
-
-            
 
             Frame frame;
             int frameIndex = 0;
@@ -75,6 +73,18 @@ public class VideoAnalyzing {
         long duration = endTime - startTime;
         System.out.println("Finished processing " + processedFrames + " frames in " + duration + " ms.");
 
+        // logging performance
+        try (PrintWriter perfWriter = new PrintWriter(new FileWriter("performance_log.csv", true))) {
+            String username = System.getProperty("user.name");
+            String os = System.getProperty("os.name") + " " + System.getProperty("os.version");
+            String javaVersion = System.getProperty("java.version");
+
+            perfWriter.println("username, Total frames,processing duration(s), os, jv -v");
+            perfWriter.println(username + "," +  processedFrames + "," + duration/1000 + "," + os + "," + javaVersion);
+        } catch (IOException e) {
+            System.err.println("Could not write performance log.");
+            e.printStackTrace();
+        }
     }
 
 }
