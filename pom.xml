@@ -22,6 +22,12 @@
       <version>1.5.11</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>javacv-platform</artifactId>
+      <version>1.5.11</version>
+    </dependency>
+
     <!-- JUnit Jupiter for testing -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -40,7 +46,7 @@
         <artifactId>exec-maven-plugin</artifactId>
         <version>3.1.0</version>
         <configuration>
-          <mainClass>io.github.brittLiban.centroidFinder.ImageSummaryApp</mainClass>
+          <mainClass>io.github.brittLiban.centroidFinder.VideoProcessorApp</mainClass>
         </configuration>
       </plugin>
 
@@ -52,7 +58,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>io.github.brittLiban.centroidfinder.VideoProcessor</mainClass>
+              <mainClass>io.github.brittLiban.centroidFinder.VideoProcessorApp</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -66,7 +72,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>io.github.brittLiban.centroidfinder.VideoProcessor</mainClass>
+              <mainClass>io.github.brittLiban.centroidFinder.VideoProcessorApp</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>
