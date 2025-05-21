@@ -12,6 +12,8 @@ public class VideoProcessorApp {
             return;
         }
 
+        
+
         // reading in the args
         String inputVideoPath = args[0]; 
         String outPutCsv = args[1]; 
@@ -39,6 +41,7 @@ public class VideoProcessorApp {
         // Where all the OOP stuff happens, makes no sense ahahhahahahaha
 
         // me telling javaCV that I want to read each frame of the video 1 by 1
+        //getting rid of the pixel formating deprictation message that appeared on my console for each frame...
         org.bytedeco.ffmpeg.global.avutil.av_log_set_level(org.bytedeco.ffmpeg.global.avutil.AV_LOG_QUIET);
         FFmpegFrameGrabber grabber = new FFmpegFrameGrabber(inputVideoPath);
 
