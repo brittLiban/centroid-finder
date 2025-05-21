@@ -19,14 +19,7 @@ public class VideoProcessorApp {
 
         //validating the args
 
-        try(FFmpegFrameGrabber grabber = new FFmpegFrameGrabber(inputVideoPath)){
-            grabber.start();
-            System.out.println("Total frames: " + grabber.getLengthInFrames());
-            System.out.println("Video duration (s): " + grabber.getLengthInTime() / 1_000_000.0);
-            grabber.stop();
-        } catch(Exception e) {
-            System.out.println("Failed to run the video");
-        }
+        FFmpegFrameGrabber grabber = new FFmpegFrameGrabber(inputVideoPath);
 
         try {
             threshold = Integer.parseInt(args[3]);
@@ -45,6 +38,10 @@ public class VideoProcessorApp {
         }
 
 
+        //passing it to be processed accordingly
+
+        VideoAnalyzing video = new VideoAnalyzing();
+        video.process(grabber);
 
     }//end of main 
 }
