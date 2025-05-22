@@ -13,7 +13,8 @@ RUN THIS: mvn clean compile assembly:single
 
         You get a self-contained JAR file: target/centroidfinder-1.0-SNAPSHOT-jar-with-dependencies.jar
 
-RUN THIS: java -jar target/centroidfinder-1.0-SNAPSHOT-jar-with-dependencies.jar ensantina.mp4 ensantina_tracking.csv 5a020c 60
+RUN THIS: java -jar target/centroidfinder-1.0-SNAPSHOT-jar-with-dependencies.jar ensantina.mp4 ensantina_tracking.csv 5a020c 60 
+          time java -jar target/centroidfinder-1.0-SNAPSHOT-jar-with-dependencies.jar shortTest.mp4 ensantina_tracking.csv 5a020c 60 
 
 -   What it does:
         It runs your main() method (in VideoProcessorApp.java) and passes in four arguments:
