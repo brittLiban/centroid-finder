@@ -2,7 +2,9 @@ receivers:
   otlp:
     protocols:
       grpc:
+        endpoint: 0.0.0.0:4317
       http:
+        endpoint: 0.0.0.0:4318   # <- CHANGED from localhost to 0.0.0.0
 
 processors:
   batch:
@@ -11,7 +13,11 @@ exporters:
   prometheus:
     endpoint: "0.0.0.0:8889"
 
+extensions:
+  health_check:
+
 service:
+  extensions: [health_check]
   pipelines:
     metrics:
       receivers: [otlp]
