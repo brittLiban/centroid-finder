@@ -4,6 +4,9 @@ receivers:
       grpc:
       http:
 
+processors:
+  batch:
+
 exporters:
   prometheus:
     endpoint: "0.0.0.0:8889"
@@ -12,11 +15,5 @@ service:
   pipelines:
     metrics:
       receivers: [otlp]
+      processors: [batch]
       exporters: [prometheus]
-
-
-#✅ This tells the OpenTelemetry Collector to:
-
-#Receive OTLP data (from your app) via port 4318 (http) or 4317 (grpc)
-
-#Expose the metrics for Prometheus to scrape on port 8889

@@ -1,11 +1,15 @@
 Open Telemetry is a tool which will essentially track WHEN THE PROGRAM RUNS
 -   How much time the program is spending in each method
 
+- You need to downlaod it (on the repo under get started)
+
 java -javaagent:C:/Users/liban/OneDrive/Documents/Bac/opentelemetry-javaagent.jar \
 -jar target/centroidfinder-1.0-SNAPSHOT-jar-with-dependencies.jar \
 shortTest.mp4 ensantina_tracking.csv 5a020c 60
 
 # 📊 Observability Setup with OpenTelemetry + Prometheus
+
+https://github.com/open-telemetry/opentelemetry-java-instrumentation
 
 This project uses **OpenTelemetry**, **Prometheus**, and **Docker** to collect and monitor metrics from a Java application.
 
@@ -137,11 +141,13 @@ services:
 2. Run your Java app with the agent:
 
    ```bash
-   java -javaagent:/path/to/opentelemetry-javaagent.jar \
-   -Dotel.metrics.exporter=otlp \
-   -Dotel.exporter.otlp.endpoint=http://localhost:4318 \
-   -Dotel.resource.attributes=service.name=centroid-finder \
-   -jar target/your-app.jar [args...]
+   java --javaagent:C:/Users/liban/OneDrive/Documents/Bac/opentelemetry-javaagent.jar \
+-Dotel.metrics.exporter=otlp \
+-Dotel.exporter.otlp.endpoint=http://localhost:4318 \
+-Dotel.resource.attributes=service.name=centroid-finder \
+-jar target/centroidfinder-1.0-SNAPSHOT-jar-with-dependencies.jar \
+shortTest.mp4 ensantina_tracking.csv 5a020c 60
+
    ```
 
 3. Visit Prometheus UI:
