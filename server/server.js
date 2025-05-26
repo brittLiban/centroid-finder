@@ -19,7 +19,9 @@ app.use(express.static('./public'));
 //mounting routers
 // app.use("/", productRouter);
 
-
+app.get('/', (req, res) => {
+    res.send("Hi")
+})
 app.listen(3000, () => {
     console.log(`Server is running on http://localhost:3000`);
 
