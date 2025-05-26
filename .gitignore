@@ -26,3 +26,7 @@ replay_pid*
 #testVideo
 ensantina.mp4
 shortTest.mp4
+
+#server
+node_modules
+package-lock
