@@ -1,3 +1,5 @@
+import fs from 'fs';
+
 const getHome = async (req, res) =>{
 
 
@@ -6,9 +8,10 @@ const getHome = async (req, res) =>{
 }
 
 const getVideos = async (req, res) =>{
+    const videos = fs.readdirSync('../processor/videos')
+    console.log(videos)
 
-    
-    res.send('The videos are : ');
+    res.send('The videos are : ' + videos);
     
 }
 
