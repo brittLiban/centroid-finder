@@ -1,5 +1,6 @@
 import fs from 'fs';
 import {fileExists} from '../utils/fileUtils.js'
+import {retrieveThumbnail} from '../utils/videoUtils.js'
 
 const getHome = async (req, res) => {
 
@@ -33,6 +34,13 @@ const getThumbnail = async (req, res) => {
 
     if(!fileExists(fileName)){
        res.status(500).send("The video you selected" + fileName + " does not exist. Please select from the following: " + videos);
+    }
+
+
+    try{
+        retrieveThumbnail(fileName);
+    }catch(err){
+        console.error("Was unable to convert the given video: " + fileName + " into a thumbnail");
     }
     
     

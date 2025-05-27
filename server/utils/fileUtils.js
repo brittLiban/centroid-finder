@@ -10,3 +10,8 @@ export function fileExists(fileName) {
   // Check if the target file is included
   return files.includes(fileName);
 }
+
+export function getPath(fileName) {
+  const videoDir = path.resolve('../processor/videos');
+  return path.join(videoDir, fileName);
+}
