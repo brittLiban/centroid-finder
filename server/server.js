@@ -11,10 +11,6 @@ app.use(express.json());
 //telling it to serve public files
 app.use(express.static('./public'));
 
-// //need to set pug as view engine 
-// app.set('view engine', 'pug');
-// //telling it where to access files.
-// app.set('views', path.resolve('./views'));
 
 
 //mounting routers
