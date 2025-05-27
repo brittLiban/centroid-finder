@@ -1,4 +1,5 @@
 import fs from 'fs';
+import {fileExists} from '../utils/fileUtils.js'
 
 const getHome = async (req, res) => {
 
@@ -21,6 +22,19 @@ const getVideos = async (req, res) => {
         console.error("error when trying to read dir", err);
         res.status(500).send('Something went wrong while reading the video folder.');
     }
+    
+}
+
+// thumbnail/:fileName
+const getThumbnail = async (req, res) => { 
+
+    const videos = fs.readdirSync('../processor/videos')
+    const fileName = req.params.fileName;
+
+    if(!fileExists(fileName)){
+       res.status(500).send("The video you selected" + fileName + " does not exist. Please select from the following: " + videos);
+    }
+    
     
 }
 

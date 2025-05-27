@@ -2,11 +2,10 @@
 -   To make a front end that can make verb calls to the backend and get this to serve properly
 
 | Endpoint                 | Method | Description                                   |
-| ------------------------ | ------ | --------------------------------------------- | - done 5/26
-| `/api/videos`            | GET    | Lists all video files in `/videos`            |
-| `/thumbnail/:filename`   | GET    | Returns first frame of video as JPEG          |
-| `/process/:filename`     | POST   | Starts processing job using Java JAR          |
-| `/process/:jobId/status` | GET    | Checks if job is running, finished, or failed |
+| ------------------------ | ------ | --------------------------------------------- || `http://localhost:3000/api/videos`            | GET    | Lists all video files in `/videos`            |
+| `http://localhost:3000/thumbnail/:filename`   | GET    | Returns first frame of video as JPEG          |
+| `http://localhost:3000/process/:filename`     | POST   | Starts processing job using Java JAR          |
+| `http://localhost:3000/process/:jobId/status` | GET    | Checks if job is running, finished, or failed |
 
 
 Outline structure
