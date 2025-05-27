@@ -5,4 +5,11 @@ const getHome = async (req, res) =>{
     
 }
 
-export default {getHome}
+const getVideos = async (req, res) =>{
+
+    
+    res.send('The videos are : ');
+    
+}
+
+export default {getHome, getVideos}
