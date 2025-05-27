@@ -1,18 +1,27 @@
 import fs from 'fs';
 
-const getHome = async (req, res) =>{
+const getHome = async (req, res) => {
 
 
     res.send('The default route sends something!');
+
+}
+
+const getVideos = async (req, res) => {
+
+    try {
+        const videos = fs.readdirSync('../processor/videos')
+        console.log(videos);
+
+        //when done with testing - remove this! 
+        res.send('The videos are : ' + videos);
+        res.status(200).json(videos); //making it more professional
+
+    }catch(err){
+        console.error("error when trying to read dir", err);
+        res.status(500).send('Something went wrong while reading the video folder.');
+    }
     
 }
 
-const getVideos = async (req, res) =>{
-    const videos = fs.readdirSync('../processor/videos')
-    console.log(videos);
-
-    res.send('The videos are : ' + videos);
-    res.status(200).json(videos); //making it more professional
-}
-
-export default {getHome, getVideos}
+export default { getHome, getVideos }
