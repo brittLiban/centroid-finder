@@ -9,10 +9,10 @@ const getHome = async (req, res) =>{
 
 const getVideos = async (req, res) =>{
     const videos = fs.readdirSync('../processor/videos')
-    console.log(videos)
+    console.log(videos);
 
     res.send('The videos are : ' + videos);
-    
+    res.status(200).json(videos); //making it more professional
 }
 
 export default {getHome, getVideos}
