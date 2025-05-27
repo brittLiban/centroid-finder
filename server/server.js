@@ -1,4 +1,5 @@
 import express from 'express';
+import router from './router/routes.js'
 import path from 'path';
 
 
@@ -19,9 +20,7 @@ app.use(express.static('./public'));
 //mounting routers
 // app.use("/", productRouter);
 
-app.get('/', (req, res) => {
-    res.send("Hi")
-})
+app.use("/", router)
 app.listen(3000, () => {
     console.log(`Server is running on http://localhost:3000`);
 
