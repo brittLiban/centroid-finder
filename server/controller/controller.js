@@ -63,6 +63,27 @@ const getThumbnail = async (req, res) => {
     }
 
 
+
 }
 
-export default { getHome, getVideos, getThumbnail }
+//java -jar target/centroidfinder-1.0-SNAPSHOT-jar-with-dependencies.jar ensantina.mp4 ensantina_tracking.csv 5a020c 60 
+//wanted command
+const postProcessVideo = (req, res) => {
+    const videoLocale = req.params.filename; //shortTest.mp4
+    const targetColor = req.query.targetColor //hex
+    const threshold = req.query.threshold //int
+
+    //all vids
+    
+    const videos = fs.readdirSync('../processor/videos')
+    //var checking
+    if (!fileExists(fileName)) {
+        res.status(500).send("The video you selected" + fileName + " does not exist. Please select from the following: " + videos);
+    }
+    
+    //the path for the video
+    
+    const cmd = `java -jar target/centroidfinder-1.0-SNAPSHOT-jar-with-dependencies.jar ${videoLocale} ensantina_tracking.csv ${targetColor} ${threshold}`
+}
+
+export default { getHome, getVideos, getThumbnail, postProcessVideo }
