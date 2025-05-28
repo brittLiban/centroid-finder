@@ -42,17 +42,22 @@ const getThumbnail = async (req, res) => {
         res.status(200).setHeader('Content-Type', 'image/jpeg');
         //.pipe is used for sending binary data. Acts as res send. 
         //.pipe works by sending data as its being generated! 
-        ffmpegProcess.stdout.pipe(res); // streams the res directly from the res to the client resp http
+        ffmpegRaw.stdout.pipe(res); // streams the res directly from the res to the client resp http
 
         //listens for any error message
-        ffmpegProcess.stderr.on('data', (data) => {
+        ffmpegRaw.stderr.on('data', (data) => {
             console.error(`ffmpeg stderr: ${data}`);
         });
 
-        ffmpegProcess.on('error', (err) => {
+        ffmpegRaw.on('error', (err) => {
             console.error('ffmpeg error:', err);
             res.status(500).json({ error: 'Error generating thumbnail' });
         });
+
+        ffmpegRaw.stderr.on('data', (data) => {
+            console.error(`ffmpeg stderr: ${data}`);
+        });
+
     } catch (err) {
         console.error("Was unable to convert the given video: " + fileName + " into a thumbnail");
     }
