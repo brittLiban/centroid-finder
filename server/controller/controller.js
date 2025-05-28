@@ -68,21 +68,23 @@ const getThumbnail = async (req, res) => {
 
 //java -jar target/centroidfinder-1.0-SNAPSHOT-jar-with-dependencies.jar ensantina.mp4 ensantina_tracking.csv 5a020c 60 
 //wanted command
-const postProcessVideo = (req, res) => {
+const postProcessVideo = async (req, res) => {
     const videoLocale = req.params.filename; //shortTest.mp4
     const targetColor = req.query.targetColor //hex
     const threshold = req.query.threshold //int
 
     //all vids
 
-    const videos = fs.readdirSync('../processor/videos')
+    
     //var checking
-    if (!fileExists(fileName)) {
-        res.status(500).send("The video you selected" + fileName + " does not exist. Please select from the following: " + videos);
+    if (!fileExists(videoLocale)) {
+        const videos = fs.readdirSync('../processor/videos')
+        return res.status(500).send("The video you selected" + videoLocale + " does not exist. Please select from the following: " + videos);
     }
+    //checking is valid hex
     const isValidHex = /^#?[0-9A-Fa-f]{6}$/;
     if (!isValidHex.test(targetColor)) {
-        return res.status(400).send("Invalid hex color code. Use format like 'FF5733' or '#FF5733'");
+        return res.status(400).send("Invalid hex color code. Use format like 'FF5733'");
     }
 
     //the path for the video
