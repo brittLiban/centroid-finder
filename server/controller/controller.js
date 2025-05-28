@@ -74,15 +74,19 @@ const postProcessVideo = (req, res) => {
     const threshold = req.query.threshold //int
 
     //all vids
-    
+
     const videos = fs.readdirSync('../processor/videos')
     //var checking
     if (!fileExists(fileName)) {
         res.status(500).send("The video you selected" + fileName + " does not exist. Please select from the following: " + videos);
     }
-    
+    const isValidHex = /^#?[0-9A-Fa-f]{6}$/;
+    if (!isValidHex.test(targetColor)) {
+        return res.status(400).send("Invalid hex color code. Use format like 'FF5733' or '#FF5733'");
+    }
+
     //the path for the video
-    
+
     const cmd = `java -jar target/centroidfinder-1.0-SNAPSHOT-jar-with-dependencies.jar ${videoLocale} ensantina_tracking.csv ${targetColor} ${threshold}`
 }
 
