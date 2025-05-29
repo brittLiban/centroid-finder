@@ -12,7 +12,6 @@ app.use(express.json());
 app.use(express.static('./public'));
 
 
-
 //mounting routers
 // app.use("/", productRouter);
 
@@ -22,4 +21,5 @@ app.listen(3000, () => {
 
 });
 
+//exporting for testing purposes
 export default app; 
