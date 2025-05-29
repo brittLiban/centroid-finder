@@ -14,6 +14,6 @@ router.get("/thumbnail/:fileName", getThumbnail);
 
 router.post("/process/:fileName", postProcessVideo);
 
-router.get('/csvjson', getCSVasJSON);
+router.get('/csvjson/:jobId', getCSVasJSON);
 
 export default router;

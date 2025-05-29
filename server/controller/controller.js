@@ -2,6 +2,7 @@ import fs from 'fs';
 import { fileExists } from '../utils/fileUtils.js'
 import { retrieveThumbnail } from '../utils/videoUtils.js'
 import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
 import { spawn } from 'child_process';
 import csv from 'csvtojson';
 
@@ -19,7 +20,7 @@ const getVideos = async (req, res) => {
         console.log(videos);
 
         //when done with testing - remove this! 
-       
+
         res.status(200).json(videos); //making it more professional
 
     } catch (err) {
@@ -77,7 +78,15 @@ const postProcessVideo = async (req, res) => {
     const targetColor = req.query.targetColor; // hex
     const threshold = req.query.threshold; // int
 
+    
+    const jobId = uuidv4();
+
+    const outputDir = path.resolve('outputCsv'); 
+    const outputCsvPath = path.join(outputDir, jobId + '.csv');
+
     const videoDir = path.resolve('processor/videos');
+
+    
 
     // Check if video file exists
     if (!fileExists(videoLocale)) {
@@ -101,7 +110,7 @@ const postProcessVideo = async (req, res) => {
         '-jar',
         jarPath,
         videoPath,
-        'centroid_tracking.csv',
+        outputCsvPath,
         targetColor,
         threshold
     ]);
@@ -117,7 +126,7 @@ const postProcessVideo = async (req, res) => {
 
     process.on('close', (code) => {
         if (code === 0) {
-            res.status(200).send(`Video processing for "${videoLocale}" completed successfully!`);
+            res.status(200).send(`Video processing for "${videoLocale}" completed successfully!. Your job id it: ` + jobId);
         } else {
             res.status(500).send(`Video processing failed with exit code ${code}.`);
         }
@@ -131,8 +140,11 @@ const postProcessVideo = async (req, res) => {
 
 // It displays the coordinates of the frame as a json
 const getCSVasJSON = async (req, res) => {
+    const jobId = req.params.jobId;
     // Resolve the absolute path to the CSV file
-    const csvPath = path.resolve('ensantina_tracking.csv');
+    const csvPath = path.resolve('outputCsv', `${jobId}.csv`);
+
+    
 
     // Check if the CSV file exists
     if (!fs.existsSync(csvPath)) {
@@ -153,4 +165,4 @@ const getCSVasJSON = async (req, res) => {
     }
 };
 
-export default { getHome, getVideos, getThumbnail, postProcessVideo, getCSVasJSON}
+export default { getHome, getVideos, getThumbnail, postProcessVideo, getCSVasJSON }
