@@ -4,6 +4,9 @@ import java.awt.image.BufferedImage;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
 
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.Frame;
@@ -73,14 +76,15 @@ public class VideoAnalyzing {
         long duration = endTime - startTime;
         System.out.println("Finished processing " + processedFrames + " frames in " + duration + " ms.");
 
-        // logging performance
         try (PrintWriter perfWriter = new PrintWriter(new FileWriter("performance_log.csv", true))) {
             String username = System.getProperty("user.name");
             String os = System.getProperty("os.name") + " " + System.getProperty("os.version");
             String javaVersion = System.getProperty("java.version");
+            String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 
-            perfWriter.println("username, Total frames,processing duration(s), os, jv -v");
-            perfWriter.println(username + "," +  processedFrames + "," + duration/1000 + "," + os + "," + javaVersion);
+            perfWriter.println("timestamp,username,Total frames,processing duration(s),os,java version");
+            perfWriter.println(timestamp + "," + username + "," + processedFrames + "," + (duration / 1000.0) + "," + os
+                    + "," + javaVersion);
         } catch (IOException e) {
             System.err.println("Could not write performance log.");
             e.printStackTrace();
