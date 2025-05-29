@@ -19,7 +19,7 @@ const getVideos = async (req, res) => {
         console.log(videos);
 
         //when done with testing - remove this! 
-        res.send('The videos are : ' + videos);
+       
         res.status(200).json(videos); //making it more professional
 
     } catch (err) {
@@ -41,7 +41,7 @@ const getThumbnail = async (req, res) => {
 
 
     try {
-        const ffmpegRaw = await retrieveThumbnail(fileName);
+        const ffmpegRaw = retrieveThumbnail(fileName);
         res.status(200).setHeader('Content-Type', 'image/jpeg');
         //.pipe is used for sending binary data. Acts as res send. 
         //.pipe works by sending data as its being generated! 
