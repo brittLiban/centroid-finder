@@ -33,7 +33,7 @@ const getThumbnail = async (req, res) => {
     const fileName = req.params.fileName;
 
     if (!fileExists(fileName)) {
-        res.status(500).send("The video you selected" + fileName + " does not exist. Please select from the following: " + videos);
+        res.status(500).send("The video you selected " + fileName + " does not exist. Please select from the following: " + videos);
     }
 
 
