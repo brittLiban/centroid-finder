@@ -5,7 +5,7 @@ import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { spawn } from 'child_process';
 import csv from 'csvtojson';
-import { createJob, setJobDone, setJobError, getJob } from '../utils/jobStore.js';
+import { createJob, setJobDone, setJobError, getJob } from '../utils/jobStoreUtils.js';
 
 const getHome = async (req, res) => {
     res.send('The default route sends something!');
@@ -14,8 +14,7 @@ const getHome = async (req, res) => {
 const getVideos = async (req, res) => {
     try {
         const videos = fs.readdirSync('../processor/videos')
-        console.log(videos);
-
+        res.status(200).send(videos);
     } catch (err) {
         console.error("error while trying to read dir", err);
         res.status(500).send('Something went wrong while reading the video folder.');
