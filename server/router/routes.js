@@ -1,16 +1,8 @@
 import express from 'express';
-import controller from './../controller/controller.js';
-// making router a Router via express
-const router = express.Router();
+import controller from './../controller/controller.js'
 
-const {
-  getHome,
-  getVideos,
-  getThumbnail,
-  postProcessVideo,
-  getCSVasJSON,
-  getJobStatus
-} = controller;
+const router = express.Router();
+const { getHome, getVideos, getThumbnail, postProcessVideo, getCSVasJSON, getJobStatus } = controller;
 
 router.get('/', getHome);
 
@@ -22,6 +14,7 @@ router.post('/process/:fileName', postProcessVideo);
 
 router.get('/csvjson/:jobId', getCSVasJSON);
 
+// check processing job status
 router.get('/process/:jobId/status', getJobStatus);
 
 export default router;
