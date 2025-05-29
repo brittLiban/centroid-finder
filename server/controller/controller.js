@@ -3,6 +3,7 @@ import { fileExists } from '../utils/fileUtils.js'
 import { retrieveThumbnail } from '../utils/videoUtils.js'
 import path from 'path';
 import { spawn } from 'child_process';
+import csv from 'csvtojson';
 
 const getHome = async (req, res) => {
 
@@ -127,4 +128,29 @@ const postProcessVideo = async (req, res) => {
         res.status(500).send('Error running Java process.');
     });
 };
-export default { getHome, getVideos, getThumbnail, postProcessVideo }
+
+// It displays the coordinates of the frame as a json
+const getCSVasJSON = async (req, res) => {
+    // Resolve the absolute path to the CSV file
+    const csvPath = path.resolve('ensantina_tracking.csv');
+
+    // Check if the CSV file exists
+    if (!fs.existsSync(csvPath)) {
+        return res.status(404).send('CSV file not found.');
+    }
+
+    try {
+
+        // Use csvtojson to convert the CSV file to a JSON array
+        const jsonArray = await csv().fromFile(csvPath);
+        res.status(200).json(jsonArray);
+
+    } catch (err) {
+
+        // Handle any errors during CSV parsing
+        console.error('Error reading CSV file:', err);
+        res.status(500).send('Error processing CSV file.');
+    }
+};
+
+export default { getHome, getVideos, getThumbnail, postProcessVideo, getCSVasJSON}
