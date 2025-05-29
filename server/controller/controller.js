@@ -1,54 +1,51 @@
 import fs from 'fs';
-import { fileExists } from '../utils/fileUtils.js'
-import { retrieveThumbnail } from '../utils/videoUtils.js'
+import { fileExists } from '../utils/fileUtils.js';
+import { retrieveThumbnail } from '../utils/videoUtils.js';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { spawn } from 'child_process';
 import csv from 'csvtojson';
+import { createJob, setJobDone, setJobError, getJob } from '../utils/jobStore.js';
 
 const getHome = async (req, res) => {
-
-
     res.send('The default route sends something!');
-
 }
 
 const getVideos = async (req, res) => {
-
     try {
         const videos = fs.readdirSync('../processor/videos')
         console.log(videos);
 
         //when done with testing - remove this! 
-
         res.status(200).json(videos); //making it more professional
 
     } catch (err) {
         console.error("error when trying to read dir", err);
         res.status(500).send('Something went wrong while reading the video folder.');
     }
-
 }
 
 // thumbnail/:fileName
 const getThumbnail = async (req, res) => {
-
     const videos = fs.readdirSync('../processor/videos')
     const fileName = req.params.fileName;
 
     if (!fileExists(fileName)) {
-        res.status(500).send("The video you selected " + fileName + " does not exist. Please select from the following: " + videos);
+        res.status(500).send(
+          "The video you selected " + fileName +
+          " does not exist. Please select from the following: " + videos
+        );
+        return;
     }
-
 
     try {
         const ffmpegRaw = retrieveThumbnail(fileName);
         res.status(200).setHeader('Content-Type', 'image/jpeg');
-        //.pipe is used for sending binary data. Acts as res send. 
-        //.pipe works by sending data as its being generated! 
-        ffmpegRaw.stdout.pipe(res); // streams the res directly from the res to the client resp http
+        //.pipe is used for sending binary data. Acts as res send.
+        //.pipe works by sending data as its being generated!
+        ffmpegRaw.stdout.pipe(res); // streams directly to client
 
-        //listens for any error message
+        // listens for any error message
         ffmpegRaw.stderr.on('data', (data) => {
             console.error(`ffmpeg stderr: ${data}`);
         });
@@ -57,41 +54,30 @@ const getThumbnail = async (req, res) => {
             console.error('ffmpeg error:', err);
             res.status(500).json({ error: 'Error generating thumbnail' });
         });
-
-        ffmpegRaw.stderr.on('data', (data) => {
-            console.error(`ffmpeg stderr: ${data}`);
-        });
-
     } catch (err) {
         console.error("Was unable to convert the given video: " + fileName + " into a thumbnail");
     }
-
-
-
 }
 
 //java -jar target/centroidfinder-1.0-SNAPSHOT-jar-with-dependencies.jar ensantina.mp4 ensantina_tracking.csv 5a020c 60 
 //wanted command
-
 const postProcessVideo = async (req, res) => {
     const videoLocale = req.params.fileName;
     const targetColor = req.query.targetColor; // hex
-    const threshold = req.query.threshold; // int
+    const threshold = req.query.threshold;      // int
 
-    
     const jobId = uuidv4();
+    createJob(jobId);
 
     const outputDir = path.resolve('outputCsv'); 
     const outputCsvPath = path.join(outputDir, jobId + '.csv');
-
     const videoDir = path.resolve('processor/videos');
-
-    
 
     // Check if video file exists
     if (!fileExists(videoLocale)) {
         const videos = fs.readdirSync(videoDir);
-        return res.status(500).send(`The video you selected (${videoLocale}) does not exist. Available videos: ${videos}`);
+        return res.status(500)
+          .send(`The video you selected (${videoLocale}) does not exist. Available videos: ${videos}`);
     }
 
     // Validate hex color
@@ -126,15 +112,19 @@ const postProcessVideo = async (req, res) => {
 
     process.on('close', (code) => {
         if (code === 0) {
-            res.status(200).send(`Video processing for "${videoLocale}" completed successfully!. Your job id it: ` + jobId);
+            const resultUrl = `/results/${jobId}.csv`;
+            setJobDone(jobId, resultUrl);
+            return res.status(202).json({ jobId });
         } else {
-            res.status(500).send(`Video processing failed with exit code ${code}.`);
+            setJobError(jobId, `Exit code ${code}`);
+            return res.status(500).json({ error: 'Error processing video' });
         }
     });
 
     process.on('error', (err) => {
         console.error('Failed to start Java process:', err);
-        res.status(500).send('Error running Java process.');
+        setJobError(jobId, err.message);
+        return res.status(500).json({ error: 'Error starting job' });
     });
 };
 
@@ -144,25 +134,42 @@ const getCSVasJSON = async (req, res) => {
     // Resolve the absolute path to the CSV file
     const csvPath = path.resolve('outputCsv', `${jobId}.csv`);
 
-    
-
     // Check if the CSV file exists
     if (!fs.existsSync(csvPath)) {
         return res.status(404).send('CSV file not found.');
     }
 
     try {
-
         // Use csvtojson to convert the CSV file to a JSON array
         const jsonArray = await csv().fromFile(csvPath);
         res.status(200).json(jsonArray);
-
     } catch (err) {
-
         // Handle any errors during CSV parsing
         console.error('Error reading CSV file:', err);
         res.status(500).send('Error processing CSV file.');
     }
 };
 
-export default { getHome, getVideos, getThumbnail, postProcessVideo, getCSVasJSON }
+export const getJobStatus = (req, res) => {
+    const { jobId } = req.params;
+    const job = getJob(jobId);
+    if (!job) {
+        return res.status(404).json({ error: 'Job ID not found' });
+    }
+    if (job.status === 'processing') {
+        return res.status(200).json({ status: 'processing' });
+    }
+    if (job.status === 'done') {
+        return res.status(200).json({ status: 'done', result: job.result });
+    }
+    return res.status(200).json({ status: 'error', error: job.error });
+};
+
+export default {
+    getHome,
+    getVideos,
+    getThumbnail,
+    postProcessVideo,
+    getCSVasJSON,
+    getJobStatus
+};
