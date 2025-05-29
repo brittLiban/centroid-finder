@@ -12,7 +12,7 @@ router.get("/api/videos", getVideos);
 
 router.get("/thumbnail/:fileName", getThumbnail);
 
-router.get("/process/:fileName/targetColor/threshold", postProcessVideo);
+router.post("/process/:fileName", postProcessVideo);
 
 router.get('/csvjson', getCSVasJSON);
 
