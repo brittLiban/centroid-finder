@@ -101,7 +101,7 @@ const postProcessVideo = async (req, res) => {
         '-jar',
         jarPath,
         videoPath,
-        'ensantina_tracking.csv',
+        'centroid_tracking.csv',
         targetColor,
         threshold
     ]);
