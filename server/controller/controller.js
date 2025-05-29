@@ -100,31 +100,39 @@ const postProcessVideo = async (req, res) => {
         threshold
     ]);
 
-    // Capture output
+     // Set up listeners BEFORE returning response
+    //we set up the java object as 'process' so we listen to that
+
+     //every time the java program s.o.u.ts something we c.log it
     process.stdout.on('data', (data) => {
         console.log(`Java stdout: ${data}`);
     });
 
+    //we c.log every error
     process.stderr.on('data', (data) => {
         console.error(`Java stderr: ${data}`);
     });
 
+    //AFTER THE JAVA PROJECT COMPLETELY IS DONE RUNNING
+    //it will do this
     process.on('close', (code) => {
+        //code === 0 means success
         if (code === 0) {
             setJobDone(jobId, `http://localhost:3000/csvJson/${jobId}.csv`);
-            return res.status(202).json({ jobId });
         } else {
             setJobError(jobId, `Exit code ${code}`);
-            return res.status(500).send(`Video processing failed with exit code ${code}.`);
         }
     });
 
     process.on('error', (err) => {
         console.error('Failed to start Java process:', err);
         setJobError(jobId, err.message);
-        return res.status(500).send('Error running Java process.');
     });
+
+    // NOW return the response
+    return res.status(202).json({ jobId });
 };
+
 
 // It displays the coordinates of the frame as a json
 const getCSVasJSON = async (req, res) => {
