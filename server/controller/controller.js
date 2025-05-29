@@ -1,6 +1,8 @@
 import fs from 'fs';
 import { fileExists } from '../utils/fileUtils.js'
 import { retrieveThumbnail } from '../utils/videoUtils.js'
+import path from 'path';
+import { spawn } from 'child_process';
 
 const getHome = async (req, res) => {
 
@@ -68,28 +70,61 @@ const getThumbnail = async (req, res) => {
 
 //java -jar target/centroidfinder-1.0-SNAPSHOT-jar-with-dependencies.jar ensantina.mp4 ensantina_tracking.csv 5a020c 60 
 //wanted command
+
 const postProcessVideo = async (req, res) => {
-    const videoLocale = req.params.filename; //shortTest.mp4
-    const targetColor = req.query.targetColor //hex
-    const threshold = req.query.threshold //int
+    const videoLocale = req.params.fileName;
+    const targetColor = req.query.targetColor; // hex
+    const threshold = req.query.threshold; // int
 
-    //all vids
+    const videoDir = path.resolve('processor/videos');
 
-    
-    //var checking
+    // Check if video file exists
     if (!fileExists(videoLocale)) {
-        const videos = fs.readdirSync('../processor/videos')
-        return res.status(500).send("The video you selected" + videoLocale + " does not exist. Please select from the following: " + videos);
+        const videos = fs.readdirSync(videoDir);
+        return res.status(500).send(`The video you selected (${videoLocale}) does not exist. Available videos: ${videos}`);
     }
-    //checking is valid hex
+
+    // Validate hex color
     const isValidHex = /^#?[0-9A-Fa-f]{6}$/;
     if (!isValidHex.test(targetColor)) {
-        return res.status(400).send("Invalid hex color code. Use format like 'FF5733'");
+        return res.status(400).send("Invalid hex color code. Use format like 'FF5733'.");
     }
 
-    //the path for the video
+    // absolute path for .jar
+    const jarPath = path.resolve('../processor/target/centroidfinder-1.0-SNAPSHOT-jar-with-dependencies.jar');
+    // absolute path for video
+    const videoPath = path.resolve('../processor/videos', videoLocale);
 
-    const cmd = `java -jar target/centroidfinder-1.0-SNAPSHOT-jar-with-dependencies.jar ${videoLocale} ensantina_tracking.csv ${targetColor} ${threshold}`
-}
+    // Build the Java command
+    const process = spawn('java', [
+        '-jar',
+        jarPath,
+        videoPath,
+        'ensantina_tracking.csv',
+        targetColor,
+        threshold
+    ]);
 
+    // Capture output
+    process.stdout.on('data', (data) => {
+        console.log(`Java stdout: ${data}`);
+    });
+
+    process.stderr.on('data', (data) => {
+        console.error(`Java stderr: ${data}`);
+    });
+
+    process.on('close', (code) => {
+        if (code === 0) {
+            res.status(200).send(`Video processing for "${videoLocale}" completed successfully!`);
+        } else {
+            res.status(500).send(`Video processing failed with exit code ${code}.`);
+        }
+    });
+
+    process.on('error', (err) => {
+        console.error('Failed to start Java process:', err);
+        res.status(500).send('Error running Java process.');
+    });
+};
 export default { getHome, getVideos, getThumbnail, postProcessVideo }
