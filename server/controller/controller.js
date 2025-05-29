@@ -111,7 +111,7 @@ const postProcessVideo = async (req, res) => {
 
     process.on('close', (code) => {
         if (code === 0) {
-            setJobDone(jobId, `/results/${jobId}.csv`);
+            setJobDone(jobId, `http://localhost:3000/csvJson/${jobId}.csv`);
             return res.status(202).json({ jobId });
         } else {
             setJobError(jobId, `Exit code ${code}`);
