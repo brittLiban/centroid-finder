@@ -30,3 +30,6 @@ shortTest.mp4
 #server
 node_modules
 package-lock
+
+# ignore OpenCV folder
+opencv/
