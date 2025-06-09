@@ -28,6 +28,8 @@ COPY server ./server
 # Add Java processor JAR
 COPY processor/videoprocessor.jar ./processor/videoprocessor.jar
 
+#Including videos for test
+COPY processor/videos ./processor/videos
 
 # Expose ports for backend (3000) & frontend (3001) ─
 EXPOSE 3000 3001
