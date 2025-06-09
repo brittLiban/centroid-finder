@@ -1,5 +1,5 @@
 # Base image with Java 25
-FROM openjdk:21-slim
+FROM openjdk:21-jdk-slim
 
 # Install curl, git, Node.js 24 and cleanup
 RUN apt-get update && \
@@ -16,3 +16,30 @@ RUN rm -rf frontend \
  && git clone https://github.com/brittLiban/salamander-tracker-frontend frontend
 
 WORKDIR /app/frontend
+RUN npm ci && npm run build
+
+# Prepare Express backend
+WORKDIR /app
+COPY server/package*.json ./server/
+RUN cd server && npm ci --omit=dev
+
+COPY server ./server
+
+# Add Java processor JAR
+COPY processor/videoprocessor.jar ./processor/videoprocessor.jar
+
+
+# Expose ports for backend (3000) & frontend (3001) ─
+EXPOSE 3000 3001
+
+# Install concurrently to run both servers 
+RUN npm install -g concurrently
+
+# Default start command
+WORKDIR /app
+CMD ["concurrently", \
+     "--names", "API,FRONTEND", \
+     "--prefix", "[{name}]", \
+     "node server/server.js", \
+     "npm --prefix frontend run start -- -p 3001"]
+
