@@ -74,9 +74,10 @@ const postProcessVideo = async (req, res) => {
         id: jobId,
         filename: `outputCsv/${jobId}.csv`,
         videoName: videoLocale,
-        createdAt: new Date().toISOString(),
+        threshold: parseInt(threshold),
+        targetColor: targetColor,
+        createdAt: new Date().toISOString()
     });
-
     const outputDir = path.resolve('outputCsv');
     const outputCsvPath = path.join(outputDir, jobId + '.csv');
     const videoDir = path.resolve('processor/videos');
@@ -190,7 +191,12 @@ const getJobStatus = (req, res) => {
 };
 
 const getAllJobs = (req, res) => {
-    const csvPath = path.resolve('outputCsv', `${jobId}.csv`);
+    const jobLogPath = path.resolve('outputCsv', 'jobLog.json');
+
+    const raw = fs.readFileSync(jobLogPath, 'utf-8');
+    const jobs = JSON.parse(raw);
+
+    return res.status(200).json(jobs);
 }
 
 export default {
