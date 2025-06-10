@@ -5,7 +5,11 @@ import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { spawn } from 'child_process';
 import csv from 'csvtojson';
+import { fileURLToPath } from 'url';
 import { createJob, setJobDone, setJobError, getJob } from '../utils/jobStoreUtils.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const getHome = async (req, res) => {
     res.send('The default route sends something!');
@@ -84,11 +88,17 @@ const postProcessVideo = async (req, res) => {
     }
 
     // absolute path for .jar
-    const jarPath = path.resolve('..', 'target', 'centroidfinder-1.0-SNAPSHOT-jar-with-dependencies.jar');
+    const jarPath = path.resolve(__dirname, '../../processor/target/centroidfinder-1.0-SNAPSHOT-jar-with-dependencies.jar');
+
 
 
     // absolute path for video
-    const videoPath = path.resolve('processor', 'videos', videoLocale);
+const videoPath = path.join(
+    path.dirname(path.dirname(__dirname)), // go from controller → server → centroid-finder
+    'processor',
+    'videos',
+    videoLocale
+);
 
     // Build the Java command
     const process = spawn('java', [
@@ -100,10 +110,10 @@ const postProcessVideo = async (req, res) => {
         threshold
     ]);
 
-     // Set up listeners BEFORE returning response
+    // Set up listeners BEFORE returning response
     //we set up the java object as 'process' so we listen to that
 
-     //every time the java program s.o.u.ts something we c.log it
+    //every time the java program s.o.u.ts something we c.log it
     process.stdout.on('data', (data) => {
         console.log(`Java stdout: ${data}`);
     });
@@ -158,17 +168,17 @@ const getCSVasJSON = async (req, res) => {
 
 // Report the status of a processing job
 const getJobStatus = (req, res) => {
-  try {
-    const { jobId } = req.params;
-    const job = getJob(jobId);
-    if (!job) return res.status(404).json({ error: 'Job ID not found' });
-    if (job.status === 'processing') return res.json({ status: 'processing' });
-    if (job.status === 'done')       return res.json({ status: 'done',   result: job.result });
-    return res.json({ status: 'error', error: job.error });
-  } catch (err) {
-    console.error('Error fetching job status', err);
-    return res.status(500).json({ error: 'Error fetching job status' });
-  }
+    try {
+        const { jobId } = req.params;
+        const job = getJob(jobId);
+        if (!job) return res.status(404).json({ error: 'Job ID not found' });
+        if (job.status === 'processing') return res.json({ status: 'processing' });
+        if (job.status === 'done') return res.json({ status: 'done', result: job.result });
+        return res.json({ status: 'error', error: job.error });
+    } catch (err) {
+        console.error('Error fetching job status', err);
+        return res.status(500).json({ error: 'Error fetching job status' });
+    }
 };
 
 export default {
