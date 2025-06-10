@@ -29,7 +29,7 @@ COPY server ./server
 COPY processor/target/centroidfinder-1.0-SNAPSHOT-jar-with-dependencies.jar /app/processor/centroidfinder.jar
 
 #Including videos for test
-COPY processor/videos ./processor/videos
+# COPY processor/videos ./processor/videos - commenting out to test usabilty with dynamic video choosing based on user input
 
 # Expose ports for backend (3000) & frontend (3001) ─
 EXPOSE 3000 3001
