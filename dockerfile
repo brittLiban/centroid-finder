@@ -34,7 +34,7 @@ COPY processor/videos ./processor/videos
 # Expose ports for backend (3000) & frontend (3001) ─
 EXPOSE 3000 3001
 
-# Install concurrently to run both servers 
+# Install concurrently to run both servers  a
 RUN npm install -g concurrently
 
 # Default start command
@@ -45,4 +45,6 @@ CMD ["concurrently", \
      "java -jar /app/processor/centroidfinder.jar", \
      "node server/server.js", \
      "npm --prefix frontend run start -- -p 3002"]
+
+
 
