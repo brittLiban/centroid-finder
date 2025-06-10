@@ -7,6 +7,7 @@ import { spawn } from 'child_process';
 import csv from 'csvtojson';
 import { fileURLToPath } from 'url';
 import { createJob, setJobDone, setJobError, getJob } from '../utils/jobStoreUtils.js';
+import { appendJobLog } from '../utils/jobLogger.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -68,6 +69,13 @@ const postProcessVideo = async (req, res) => {
 
     const jobId = uuidv4();
     createJob(jobId);
+    //logging job
+    appendJobLog({
+        id: jobId,
+        filename: `outputCsv/${jobId}.csv`,
+        videoName: videoLocale,
+        createdAt: new Date().toISOString(),
+    });
 
     const outputDir = path.resolve('outputCsv');
     const outputCsvPath = path.join(outputDir, jobId + '.csv');
@@ -93,12 +101,12 @@ const postProcessVideo = async (req, res) => {
 
 
     // absolute path for video
-const videoPath = path.join(
-    path.dirname(path.dirname(__dirname)), // go from controller → server → centroid-finder
-    'processor',
-    'videos',
-    videoLocale
-);
+    const videoPath = path.join(
+        path.dirname(path.dirname(__dirname)), // go from controller → server → centroid-finder
+        'processor',
+        'videos',
+        videoLocale
+    );
 
     // Build the Java command
     const process = spawn('java', [
@@ -181,11 +189,16 @@ const getJobStatus = (req, res) => {
     }
 };
 
+const getAllJobs = (req, res) => {
+    const csvPath = path.resolve('outputCsv', `${jobId}.csv`);
+}
+
 export default {
     getHome,
     getVideos,
     getThumbnail,
     postProcessVideo,
     getCSVasJSON,
-    getJobStatus
+    getJobStatus,
+    getAllJobs
 };
