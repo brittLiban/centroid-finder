@@ -75,7 +75,7 @@ const postProcessVideo = async (req, res) => {
     return res.status(400).send("Invalid hex color code. Use format like 'FF5733'.");
   }
 
-  const jarPath = path.resolve('processor/target/centroidfinder-1.0-SNAPSHOT-jar-with-dependencies.jar');
+  const jarPath = '/app/processor/centroidfinder.jar';
   const videoPath = path.resolve('processor/videos', videoLocale);
 
   const process = spawn('java', [
