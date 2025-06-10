@@ -40,11 +40,11 @@ RUN npm install -g concurrently
 # Default start command
 WORKDIR /app
 CMD ["concurrently", \
-     "--names", "JAR,API,FRONTEND", \
+     "--names", "API,FRONTEND", \
      "--prefix", "[{name}]", \
-     "java -jar /app/processor/centroidfinder.jar", \
      "node server/server.js", \
      "npm --prefix frontend run start -- -p 3002"]
+
 
 
 
