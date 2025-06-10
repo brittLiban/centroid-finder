@@ -25,8 +25,8 @@ RUN cd server && npm ci --omit=dev
 
 COPY server ./server
 
-# Add Java processor JAR
-COPY processor/videoprocessor.jar ./processor/videoprocessor.jar
+# Copy JAR into the container
+COPY processor/target/centroidfinder-1.0-SNAPSHOT-jar-with-dependencies.jar /app/processor/centroidfinder.jar
 
 #Including videos for test
 COPY processor/videos ./processor/videos
