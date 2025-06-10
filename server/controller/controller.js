@@ -84,10 +84,11 @@ const postProcessVideo = async (req, res) => {
     }
 
     // absolute path for .jar
-    const jarPath = path.resolve('processor/target/centroidfinder-1.0-SNAPSHOT-jar-with-dependencies.jar');
+    const jarPath = path.resolve('..', 'target', 'centroidfinder-1.0-SNAPSHOT-jar-with-dependencies.jar');
+
 
     // absolute path for video
-    const videoPath = path.resolve('../processor/videos', videoLocale);
+    const videoPath = path.resolve('processor', 'videos', videoLocale);
 
     // Build the Java command
     const process = spawn('java', [
