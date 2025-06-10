@@ -1,5 +1,6 @@
 package io.github.brittLiban.centroidFinder;
 
+import java.io.File;
 import java.io.PrintWriter;
 
 import org.bytedeco.javacv.FFmpegFrameGrabber;
@@ -89,7 +90,10 @@ public class VideoProcessorApp {
         // processor?
         VideoAnalyzing video = new VideoAnalyzing(processor);
 
-        try (PrintWriter writer = new PrintWriter(outPutCsv)) {
+        File outputFile = new File(outPutCsv);
+        outputFile.getParentFile().mkdirs(); 
+        try (PrintWriter writer = new PrintWriter(outputFile)) {
+            
             grabber.start();
             video.process(grabber, writer); // starts processing frame-by-frame processing
             grabber.stop();
