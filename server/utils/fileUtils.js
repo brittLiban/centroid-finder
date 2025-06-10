@@ -2,8 +2,8 @@ import fs from 'fs';
 import path from 'path';
 
 export function fileExists(fileName) {
-  const videoDir = path.resolve('../processor/videos');
-  
+  const videoDir = path.resolve('processor/videos'); 
+
   // Read all files in the videos directory
   const files = fs.readdirSync(videoDir);
 
@@ -12,6 +12,6 @@ export function fileExists(fileName) {
 }
 
 export function getPath(fileName) {
-  const videoDir = path.resolve('../processor/videos');
+  const videoDir = path.resolve('processor/videos'); 
   return path.join(videoDir, fileName);
 }

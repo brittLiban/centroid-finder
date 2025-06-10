@@ -43,5 +43,5 @@ CMD ["concurrently", \
      "--names", "API,FRONTEND", \
      "--prefix", "[{name}]", \
      "node server/server.js", \
-     "npm --prefix frontend run start -- -p 3001"]
+     "npm --prefix frontend run start -- -p 3002"]
 
