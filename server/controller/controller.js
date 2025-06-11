@@ -70,14 +70,7 @@ const postProcessVideo = async (req, res) => {
     const jobId = uuidv4();
     createJob(jobId);
     //logging job
-    appendJobLog({
-        id: jobId,
-        filename: `outputCsv/${jobId}.csv`,
-        videoName: videoLocale,
-        threshold: parseInt(threshold),
-        targetColor: targetColor,
-        createdAt: new Date().toISOString()
-    });
+
     const outputDir = path.resolve('outputCsv');
     const outputCsvPath = path.join(outputDir, jobId + '.csv');
     const videoDir = path.resolve('processor/videos');
@@ -138,6 +131,15 @@ const postProcessVideo = async (req, res) => {
         //code === 0 means success
         if (code === 0) {
             setJobDone(jobId, `http://localhost:3000/csvJson/${jobId}.csv`);
+
+            appendJobLog({
+                id: jobId,
+                filename: `outputCsv/${jobId}.csv`,
+                videoName: videoLocale,
+                threshold: parseInt(threshold),
+                targetColor: targetColor,
+                createdAt: new Date().toISOString()
+            });
         } else {
             setJobError(jobId, `Exit code ${code}`);
         }
