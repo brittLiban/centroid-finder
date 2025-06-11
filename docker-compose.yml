@@ -1,23 +1,15 @@
 version: '3.9'
 
 services:
-  backend:
-    build: 
-    ports:
-      - "3001:3001"
-    volumes:
-      - ./processor/videos:/videos
-      - ./outputCsv:/results
-    working_dir: /app/server
-    environment:
-      - VIDEO_INPUT_DIR=/videos
-      - OUTPUT_DIR=/results
-
-  frontend:
+  app:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    volumes:
+      - ./hostVideos:/videos
+      - ./hostResults:/results
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:3001
+      - VIDEO_INPUT_DIR=/videos
+      - OUTPUT_DIR=/results

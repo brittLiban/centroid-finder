@@ -1,19 +1,33 @@
-FROM node:20
+# Base image with Java 21 and slim OS
+FROM openjdk:21-jdk-slim
 
+# Install Node.js 24, ffmpeg, curl, and git
+RUN apt-get update && \
+    apt-get install -y curl gnupg git ffmpeg && \
+    curl -fsSL https://deb.nodesource.com/setup_24.x | bash - && \
+    apt-get install -y nodejs && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Create expected folders to prevent ENOENT
+RUN mkdir -p /videos /results
+
+# Set working directory
 WORKDIR /app
 
-# Clean stale content
-RUN rm -rf *
+# Copy backend dependencies
+COPY server/package*.json ./server/
+RUN cd server && npm install
 
-# Clone latest frontend
-RUN git clone --depth=1 https://github.com/brittLiban/salamander-tracker-frontend.git .
+# Copy backend and Java processor
+COPY server ./server
+COPY processor/target/centroidfinder-1.0-SNAPSHOT-jar-with-dependencies.jar ./processor/target/centroidfinder-1.0-SNAPSHOT-jar-with-dependencies.jar
 
-# Install dependencies
-RUN npm install
+# Set environment variables
+ENV VIDEO_INPUT_DIR=/videos
+ENV OUTPUT_DIR=/results
 
-
-
-# Start production server on port 3000
+# Expose backend port
 EXPOSE 3000
-CMD ["npm", "run", "dev", "--", "-p", "3000"]
 
+# Start the backend server
+CMD ["node", "server/server.js"]

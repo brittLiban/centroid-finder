@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { fileExists } from '../utils/fileUtils.js'
+import { fileExists, getPath } from '../utils/fileUtils.js';
 import { retrieveThumbnail } from '../utils/videoUtils.js'
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
@@ -12,13 +12,23 @@ import { appendJobLog } from '../utils/jobLogger.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const VIDEO_INPUT_DIR = process.env.VIDEO_INPUT_DIR
+    ? path.resolve(process.env.VIDEO_INPUT_DIR)
+    : path.resolve(process.cwd(), 'videos');
+
+const OUTPUT_DIR = process.env.OUTPUT_DIR
+    ? path.resolve(process.env.OUTPUT_DIR)
+    : path.resolve(process.cwd(), 'results');
+
+
+
 const getHome = async (req, res) => {
     res.send('The default route sends something!');
 }
 
 const getVideos = async (req, res) => {
     try {
-        const videos = fs.readdirSync('../processor/videos')
+        const videos = fs.readdirSync(VIDEO_INPUT_DIR)
         res.status(200).send(videos);
     } catch (err) {
         console.error("error while trying to read dir", err);
@@ -28,8 +38,11 @@ const getVideos = async (req, res) => {
 
 // thumbnail/:fileName
 const getThumbnail = async (req, res) => {
-    const videos = fs.readdirSync('../processor/videos')
+    const videos = fs.readdirSync(VIDEO_INPUT_DIR)
     const fileName = req.params.fileName;
+    const fullPath = getPath(fileName);
+    console.log("📸 Checking for file at:", fullPath);
+    console.log("📁 Files in dir:", fs.readdirSync(VIDEO_INPUT_DIR));
 
     if (!fileExists(fileName)) {
         res.status(500).send(
@@ -71,9 +84,9 @@ const postProcessVideo = async (req, res) => {
     createJob(jobId);
     //logging job
 
-    const outputDir = path.resolve('outputCsv');
+    const outputDir = path.resolve(OUTPUT_DIR);
     const outputCsvPath = path.join(outputDir, jobId + '.csv');
-    const videoDir = path.resolve('processor/videos');
+    const videoDir = path.resolve(VIDEO_INPUT_DIR);
 
     // Check if video file exists
     if (!fileExists(videoLocale)) {
@@ -95,12 +108,8 @@ const postProcessVideo = async (req, res) => {
 
 
     // absolute path for video
-    const videoPath = path.join(
-        path.dirname(path.dirname(__dirname)), // go from controller → server → centroid-finder
-        'processor',
-        'videos',
-        videoLocale
-    );
+    const videoPath = path.join(VIDEO_INPUT_DIR, videoLocale);
+
 
     // Build the Java command
     const process = spawn('java', [
@@ -134,7 +143,7 @@ const postProcessVideo = async (req, res) => {
 
             appendJobLog({
                 id: jobId,
-                filename: `outputCsv/${jobId}.csv`,
+                filename: `${OUTPUT_DIR}/${jobId}.csv`,
                 videoName: videoLocale,
                 threshold: parseInt(threshold),
                 targetColor: targetColor,
@@ -159,7 +168,7 @@ const postProcessVideo = async (req, res) => {
 const getCSVasJSON = async (req, res) => {
     const jobId = req.params.jobId;
     // Resolve the absolute path to the CSV file
-    const csvPath = path.resolve('outputCsv', `${jobId}.csv`);
+    const csvPath = path.resolve(OUTPUT_DIR, `${jobId}.csv`);
 
     // Check if the CSV file exists
     if (!fs.existsSync(csvPath)) {
@@ -192,15 +201,24 @@ const getJobStatus = (req, res) => {
     }
 };
 
-const getAllJobs = (req, res) => {
-    const jobLogPath = path.resolve('outputCsv', 'jobLog.json');
+
+
+export const getAllJobs = (req, res) => {
+  try {
+    const jobLogPath = path.join(OUTPUT_DIR, 'jobLog.json');
+
+    if (!fs.existsSync(jobLogPath)) {
+      return res.status(200).json([]); 
+    }
 
     const raw = fs.readFileSync(jobLogPath, 'utf-8');
     const jobs = JSON.parse(raw);
-
     return res.status(200).json(jobs);
-}
-
+  } catch (err) {
+    console.error('❌ Error reading job log:', err);
+    return res.status(500).json({ error: 'Failed to load job history.' });
+  }
+};
 export default {
     getHome,
     getVideos,

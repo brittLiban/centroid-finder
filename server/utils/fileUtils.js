@@ -1,17 +1,26 @@
 import fs from 'fs';
 import path from 'path';
 
-export function fileExists(fileName) {
-  const videoDir = path.resolve('../processor/videos');
-  
-  // Read all files in the videos directory
-  const files = fs.readdirSync(videoDir);
+console.log("🛠️ process.env.VIDEO_INPUT_DIR:", process.env.VIDEO_INPUT_DIR);
+console.log("🛠️ process.cwd():", process.cwd());
 
-  // Check if the target file is included
-  return files.includes(fileName);
+const VIDEO_INPUT_DIR = process.env.VIDEO_INPUT_DIR
+  ? path.resolve(process.env.VIDEO_INPUT_DIR)
+  : path.resolve(process.cwd(), 'videos');
+
+const OUTPUT_DIR = process.env.OUTPUT_DIR
+  ? path.resolve(process.env.OUTPUT_DIR)
+  : path.resolve(process.cwd(), 'results');
+
+console.log("🔍 Final VIDEO_INPUT_DIR resolved to:", VIDEO_INPUT_DIR);
+console.log("🔍 Final OUTPUT_DIR resolved to:", OUTPUT_DIR);
+
+export function fileExists(fileName) {
+  const fullPath = path.join(VIDEO_INPUT_DIR, fileName);
+  console.log("🔎 Checking for file at:", fullPath);
+  return fs.existsSync(fullPath);
 }
 
 export function getPath(fileName) {
-  const videoDir = path.resolve('../processor/videos');
-  return path.join(videoDir, fileName);
+  return path.join(VIDEO_INPUT_DIR, fileName);
 }

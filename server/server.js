@@ -13,17 +13,20 @@ app.use(cors());
 //telling it to serve public files
 app.use(express.static('./public'));
 
-// Serve processed CSV results at /results
-app.use('/results', express.static(path.resolve('outputCsv')));
+//making it useable with docker
+const OUTPUT_DIR = process.env.OUTPUT_DIR || 'outputCsv';
+app.use('/results', express.static(path.resolve(OUTPUT_DIR)));
 
 //mounting routers
 // app.use("/", productRouter);
 
 app.use("/", router);
 
-app.listen(3001, () => {
-    console.log(`Server is running on http://localhost:3001`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
+
 
 //exporting for testing purposes
 export default app;
