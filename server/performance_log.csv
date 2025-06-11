@@ -66,3 +66,7 @@ timestamp,username,Total frames,processing duration(s),os,java version
 2025-06-10 15:18:37,liban,120,1.173,Windows 11 10.0,23
 timestamp,username,Total frames,processing duration(s),os,java version
 2025-06-10 17:32:55,liban,120,5.669,Windows 11 10.0,23
+timestamp,username,Total frames,processing duration(s),os,java version
+2025-06-10 22:38:33,liban,120,1.155,Windows 11 10.0,23
+timestamp,username,Total frames,processing duration(s),os,java version
+2025-06-10 22:56:50,liban,120,1.157,Windows 11 10.0,23
