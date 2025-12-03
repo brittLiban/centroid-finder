@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import router from './router/routes.js';
 import path from 'path';
