@@ -1,5 +1,5 @@
-# Base image with Java 21 and slim OS
-FROM openjdk:21-jdk-slim
+# Base image with Java 21 (Temurin) on Ubuntu Jammy
+FROM eclipse-temurin:21-jdk-jammy
 
 # Install Node.js 24, ffmpeg, curl, and git
 RUN apt-get update && \
