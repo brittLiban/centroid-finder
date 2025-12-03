@@ -30,3 +30,7 @@ videos/shorty.mp4
 #server
 node_modules
 package-lock
+
+# Environment files (in any folder)
+.env
+**/.env
