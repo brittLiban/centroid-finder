@@ -34,3 +34,9 @@ package-lock
 # Environment files (in any folder)
 .env
 **/.env
+
+# Logs and job data
+**/performance_log.csv
+**/jobLog.json
+results/
+server/outputCsv/
