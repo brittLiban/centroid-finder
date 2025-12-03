@@ -1,8 +1,9 @@
 import { getPath } from "./fileUtils.js";
 import { spawn } from "child_process";
+import ffmpegStatic from "ffmpeg-static";
 
-// use system-installed ffmpeg (inside Docker)
-const ffmpegPath = 'ffmpeg';
+// use ffmpeg-static in dev, falls back to system ffmpeg in Docker
+const ffmpegPath = ffmpegStatic || 'ffmpeg';
 
 export function retrieveThumbnail(fileName) {
     const videoPath = getPath(fileName);
