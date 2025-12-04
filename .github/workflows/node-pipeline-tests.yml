@@ -1,0 +1,16 @@
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  pipeline-tests:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: server
+
