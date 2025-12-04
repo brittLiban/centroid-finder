@@ -72,5 +72,21 @@ describe("Critical: /api/videos safety", () => {
     const res = await request(videosApp).get("/api/videos");
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
+
+    const names = res.body.map((item) =>
+      typeof item === "string" ? item : item.fileName
+    );
+
+    // Should include the files created
+    expect(names).toEqual(expect.arrayContaining(["a.mp4", "b.MP4", "notes.txt"]));
+
+    // API must return plain names, not paths or traversal tokens
+    for (const n of names) {
+      expect(typeof n).toBe("string");
+      expect(n).not.toContain("..");
+      expect(n).not.toContain("/");
+      expect(n).not.toContain("\\");
+      expect(n).not.toContain(":");
+    }
   });
 });
