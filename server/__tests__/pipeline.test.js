@@ -89,4 +89,20 @@ describe("Critical: /api/videos safety", () => {
       expect(n).not.toContain(":");
     }
   });
+  
+});
+
+
+// Test #3: CORS preflight works (frontend can call backend)
+describe("Critical: CORS preflight", () => {
+  let corsApp;
+
+  beforeAll(async () => {
+    process.env.NODE_ENV = "test";
+
+    // Reload server for a clean instance
+    jest.resetModules();
+    const mod = await import("../server.js");
+    corsApp = mod.default;
+  });
 });
