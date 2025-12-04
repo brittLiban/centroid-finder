@@ -18,15 +18,24 @@ app.use(express.static('./public'));
 const OUTPUT_DIR = process.env.OUTPUT_DIR || 'outputCsv';
 app.use('/results', express.static(path.resolve(OUTPUT_DIR)));
 
+//simple health endpoint (easy to test + proves server is up)
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
+
 //mounting routers
 // app.use("/", productRouter);
 
 app.use("/", router);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+
+//don’t listen during tests
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+}
 
 
 //exporting for testing purposes
