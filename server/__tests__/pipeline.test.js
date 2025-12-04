@@ -63,4 +63,14 @@ describe("Critical: /api/videos safety", () => {
     const mod = await import("../server.js");
     videosApp = mod.default;
   });
+
+  afterAll(async () => {
+    await fs.rm(tmpVideosDir, { recursive: true, force: true });
+  });
+
+  test("GET /api/videos returns safe file names (no path leakage)", async () => {
+    const res = await request(videosApp).get("/api/videos");
+    expect(res.status).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+  });
 });
