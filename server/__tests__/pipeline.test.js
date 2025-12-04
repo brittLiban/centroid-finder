@@ -24,3 +24,19 @@ beforeAll(async () => {
   app = mod.default;
 });
 
+afterAll(async () => {
+  // Cleanup
+  await fs.rm(tmpDir, { recursive: true, force: true });
+});
+
+test("GET /results/demo.csv serves a generated CSV", async () => {
+  const res = await request(app).get(`/results/${fileName}`);
+  expect(res.status).toBe(200);
+  expect(res.text).toContain("x,y");
+  expect(res.text).toContain("1,2");
+});
+
+test("GET /results/../server.js is blocked (path traversal)", async () => {
+  const res = await request(app).get("/results/../server.js");
+  expect([403, 404]).toContain(res.status);
+});
