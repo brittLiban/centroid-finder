@@ -105,4 +105,17 @@ describe("Critical: CORS preflight", () => {
     const mod = await import("../server.js");
     corsApp = mod.default;
   });
+
+  test("OPTIONS /api/videos returns CORS headers", async () => {
+    const res = await request(corsApp)
+      .options("/api/videos")
+      .set("Origin", "http://example.com")
+      .set("Access-Control-Request-Method", "GET");
+
+    // cors middleware often responds 204 on preflight
+    expect([200, 204]).toContain(res.status);
+
+    // Should include allow-origin (either * or echo of origin)
+    expect(res.headers["access-control-allow-origin"]).toBeDefined();
+  });
 });
