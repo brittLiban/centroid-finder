@@ -1,4 +1,4 @@
-name: CI
+name: Node Pipeline Tests
 
 on:
   push:
@@ -14,3 +14,19 @@ jobs:
       run:
         working-directory: server
 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run pipeline tests
+        run: npm run test:pipeline

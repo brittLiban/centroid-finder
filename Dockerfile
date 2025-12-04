@@ -31,5 +31,3 @@ EXPOSE 3000
 
 # Start the backend server
 CMD ["node", "server/server.js"]
-
-#started working on testing
