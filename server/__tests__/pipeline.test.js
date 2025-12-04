@@ -40,3 +40,27 @@ test("GET /results/../server.js is blocked (path traversal)", async () => {
   const res = await request(app).get("/results/../server.js");
   expect([403, 404]).toContain(res.status);
 });
+
+
+// Test #2: /api/videos returns safe file names (no path leakage)
+describe("Critical: /api/videos safety", () => {
+  let videosApp;
+  const tmpVideosDir = path.join(process.cwd(), "__tests__", "tmp-videos");
+
+  beforeAll(async () => {
+    process.env.NODE_ENV = "test";
+    process.env.VIDEO_INPUT_DIR = tmpVideosDir;
+
+    await fs.mkdir(tmpVideosDir, { recursive: true });
+
+    // create a mix of files
+    await fs.writeFile(path.join(tmpVideosDir, "a.mp4"), "fake", "utf8");
+    await fs.writeFile(path.join(tmpVideosDir, "b.MP4"), "fake", "utf8");
+    await fs.writeFile(path.join(tmpVideosDir, "notes.txt"), "nope", "utf8");
+
+    // Reload server so it reads VIDEO_INPUT_DIR
+    jest.resetModules();
+    const mod = await import("../server.js");
+    videosApp = mod.default;
+  });
+});
