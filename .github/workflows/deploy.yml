@@ -1,0 +1,35 @@
+name: Deploy salamander to VM
+
+on: 
+    push:
+        branches:
+        - main
+        - deployment-to-vm
+    workflow_dispatch:
+    
+jobs:
+    deploy_vm:
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v2 
+        
+        - name: Set up SSH
+          run: |
+              mkdir -p ~/.ssh
+              echo "${{ secrets.VM_SSH_KEY }}" > ~/.ssh/id_ed25519
+              chmod 600 ~/.ssh/id_ed25519
+              ssh-keyscan -H ${{ secrets.VM_HOST }} >> ~/.ssh/known_hosts
+        
+        - name: Deploy to VM
+          run: |
+                ssh -i ~/.ssh/id_ed25519 -p ${{ secrets.VM_PORT }} ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} << 'EOF'
+                cd ~/Salamander-Deployment || exit
+                cd centroid-finder || exit
+                git pull origin main
+                cd ..
+                docker compose down
+                docker compose up -d --build
+                EOF
+
