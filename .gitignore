@@ -23,9 +23,6 @@
 hs_err_pid*
 replay_pid*
 
-#testVideo
-videos/ensantina.mp4
-videos/shorty.mp4
 
 #server
 node_modules
