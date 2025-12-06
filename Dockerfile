@@ -25,9 +25,10 @@ COPY processor/target/centroidfinder-1.0-SNAPSHOT-jar-with-dependencies.jar ./pr
 # Set environment variables
 ENV VIDEO_INPUT_DIR=/videos
 ENV OUTPUT_DIR=/results
+ENV PORT=3001
 
 # Expose backend port
-EXPOSE 3000
+EXPOSE 3001
 
 # Start the backend server
 CMD ["node", "server/server.js"]

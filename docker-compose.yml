@@ -6,10 +6,11 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "3001:3001"
     volumes:
       - ./hostVideos:/videos
       - ./hostResults:/results
     environment:
+      - PORT=3001
       - VIDEO_INPUT_DIR=/videos
       - OUTPUT_DIR=/results
